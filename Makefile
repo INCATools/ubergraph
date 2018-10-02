@@ -12,7 +12,7 @@ mirror: ontologies.ofn
 
 ontologies-merged.ttl: ontologies.ofn mirror
 	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< \
-	reason -r ELK -o $@
+	reason -r ELK -D debug.ofn -o $@
 
 properties-nonredundant.ttl: ontologies-merged.ttl
 	$(NCIT_UTILS) materialize-property-expressions ontologies-merged.ttl nonredundant=properties-nonredundant.ttl redundant=properties-redundant.ttl &&\
