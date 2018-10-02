@@ -10,7 +10,7 @@ mirror: ontologies.ofn
 	rm -rf $@ &&\
 	$(ROBOT) mirror -i $< -d $@ -o $@/catalog-v001.xml
 
-ontologies-merged.ttl: mirror ontologies.ofn
+ontologies-merged.ttl: ontologies.ofn mirror
 	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< \
 	reason -r ELK -o $@
 
