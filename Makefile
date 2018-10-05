@@ -12,6 +12,8 @@ mirror: ontologies.ofn
 
 ontologies-merged.ttl: ontologies.ofn mirror
 	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< \
+	remove -i $< --axioms 'disjoint' --trim true \
+	remove --term 'owl:Nothing' --trim true \
 	reason -r ELK -D debug.ofn -o $@
 
 properties-nonredundant.ttl: ontologies-merged.ttl
