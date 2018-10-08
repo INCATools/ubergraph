@@ -27,7 +27,7 @@ properties-redundant.ttl: properties-nonredundant.ttl
 
 ubergraph.jnl: subclass_closure.ttl properties-nonredundant.ttl properties-redundant.ttl
 	rm -f $@ &&\
-	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph 'http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
-	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph 'http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
-	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph 'http://reasoner.renci.org/nonredundant' properties-nonredundant.ttl &&\
-	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph 'http://reasoner.renci.org/redundant' properties-redundant.ttl
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.ttl &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.ttl
