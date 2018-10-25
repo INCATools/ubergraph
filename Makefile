@@ -25,9 +25,16 @@ properties-nonredundant.ttl: ontologies-merged.ttl
 
 properties-redundant.ttl: properties-nonredundant.ttl
 
+antonyms_HP.txt:
+	curl -L https://raw.githubusercontent.com/Phenomics/phenopposites/master/opposites/antonyms_HP.txt -o $@
+
+opposites.ttl: antonyms_HP.txt
+	awk 'NR > 2 { print $1, "<http://reasoner.renci.org/opposite_of>", $2, "."}; NR > 2 { print $2, "<http://reasoner.renci.org/opposite_of>", $1, "."; } ' antonyms_HP.txt > $@
+
 ubergraph.jnl: subclass_closure.ttl properties-nonredundant.ttl properties-redundant.ttl
 	rm -f $@ &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.ttl
