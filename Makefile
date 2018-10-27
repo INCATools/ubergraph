@@ -32,7 +32,7 @@ opposites.ttl: antonyms_HP.txt
 	echo "@prefix HP: <http://purl.obolibrary.org/obo/HP_>" >$@
 	awk 'NR > 2 { print $$1, "<http://reasoner.renci.org/opposite_of>", $$2, "."}; NR > 2 { print $$2, "<http://reasoner.renci.org/opposite_of>", $$1, "."; } ' antonyms_HP.txt >>$@
 
-ubergraph.jnl: subclass_closure.ttl properties-nonredundant.ttl properties-redundant.ttl
+ubergraph.jnl: subclass_closure.ttl properties-nonredundant.ttl properties-redundant.ttl opposites.ttl
 	rm -f $@ &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
