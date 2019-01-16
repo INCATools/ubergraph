@@ -4,7 +4,7 @@ CONSTRUCT {
   ?sub rdfs:subClassOf ?super .
 }
 WHERE {
-  ?sub rdfs:subClassOf+ ?super .
+  ?sub rdfs:subClassOf* ?super .
   FILTER(isIRI(?sub))
   FILTER(isIRI(?super))
 }
