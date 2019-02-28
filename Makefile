@@ -19,6 +19,9 @@ ontologies-merged.ttl: ontologies.ofn mirror
 subclass_closure.ttl: ontologies-merged.ttl subclass_closure.rq
 	$(ROBOT) query -i $< --construct subclass_closure.rq $@
 
+is_defined_by.ttl: ontologies-merged.ttl
+	$(ROBOT) query -i $< --construct isDefinedBy.rq $@
+
 properties-nonredundant.ttl: ontologies-merged.ttl
 	$(NCIT_UTILS) materialize-property-expressions ontologies-merged.ttl properties-nonredundant.ttl properties-redundant.ttl &&\
 	touch properties-redundant.ttl
@@ -32,10 +35,11 @@ opposites.ttl: antonyms_HP.txt
 	echo "@prefix HP: <http://purl.obolibrary.org/obo/HP_> ." >$@
 	awk 'NR > 2 { print $$1, "<http://purl.obolibrary.org/obo/RO_0002604>", $$2, "."}; NR > 2 { print $$2, "<http://reasoner.renci.org/opposite_of>", $$1, "."; } ' antonyms_HP.txt >>$@
 
-ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl properties-nonredundant.ttl properties-redundant.ttl opposites.ttl
+ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.ttl properties-redundant.ttl opposites.ttl
 	rm -f $@ &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' is_defined_by.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.ttl

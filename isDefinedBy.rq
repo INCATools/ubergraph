@@ -1,0 +1,12 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+CONSTRUCT {
+?s rdfs:isDefinedBy ?iri .
+}
+WHERE {
+?s ?p ?o .
+FILTER (isIRI(?s))
+FILTER (STRSTARTS(STR(?s), "http://purl.obolibrary.org/obo/"))
+BIND (LCASE(REPLACE(STRAFTER(STR(?s), "http://purl.obolibrary.org/obo/"), "_[^_]+$", "")) AS ?ont) 
+BIND (IRI(CONCAT((CONCAT("http://purl.obolibrary.org/obo/", ?ont)), ".owl")) AS ?iri) .
+}
