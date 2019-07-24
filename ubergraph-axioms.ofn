@@ -1,0 +1,37 @@
+Prefix(:=<http://translator.renci.org/ubergraph-axioms.ofn#>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<http://translator.renci.org/ubergraph-axioms.ofn>
+
+Declaration(Class(<http://purl.obolibrary.org/obo/PATO_0000470>))
+Declaration(Class(<http://purl.obolibrary.org/obo/PATO_0001997>))
+Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/BFO_0000051>))
+Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/RO_0000052>))
+Declaration(ObjectProperty(:decreasedAmountRole))
+Declaration(ObjectProperty(:increasedAmountRole))
+Declaration(ObjectProperty(:is_decrease_of))
+Declaration(ObjectProperty(:is_increase_of))
+
+############################
+#   Classes
+############################
+
+# Class: <http://purl.obolibrary.org/obo/PATO_0000470> (increased amount)
+
+EquivalentClasses(<http://purl.obolibrary.org/obo/PATO_0000470> ObjectHasSelf(:increasedAmountRole))
+
+# Class: <http://purl.obolibrary.org/obo/PATO_0001997> (decreased amount)
+
+EquivalentClasses(<http://purl.obolibrary.org/obo/PATO_0001997> ObjectHasSelf(:decreasedAmountRole))
+
+
+SubObjectPropertyOf(ObjectPropertyChain(<http://purl.obolibrary.org/obo/BFO_0000051> :is_decrease_of) :is_decrease_of)
+SubObjectPropertyOf(ObjectPropertyChain(<http://purl.obolibrary.org/obo/BFO_0000051> :is_increase_of) :is_increase_of)
+SubObjectPropertyOf(ObjectPropertyChain(:decreasedAmountRole <http://purl.obolibrary.org/obo/RO_0000052>) :is_decrease_of)
+SubObjectPropertyOf(ObjectPropertyChain(:increasedAmountRole <http://purl.obolibrary.org/obo/RO_0000052>) :is_increase_of)
+)
