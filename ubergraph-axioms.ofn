@@ -10,28 +10,61 @@ Ontology(<http://translator.renci.org/ubergraph-axioms.ofn>
 
 Declaration(Class(<http://purl.obolibrary.org/obo/PATO_0000470>))
 Declaration(Class(<http://purl.obolibrary.org/obo/PATO_0001997>))
+Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/BFO_0000050>))
 Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/BFO_0000051>))
 Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/RO_0000052>))
+Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/RO_0002502>))
+Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/UPHENO_0000001>))
 Declaration(ObjectProperty(:decreasedAmountRole))
 Declaration(ObjectProperty(:increasedAmountRole))
 Declaration(ObjectProperty(:is_decrease_of))
 Declaration(ObjectProperty(:is_increase_of))
 
 ############################
+#   Object Properties
+############################
+
+# Object Property: <http://purl.obolibrary.org/obo/BFO_0000050> (part of)
+
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/BFO_0000050> "part of"^^xsd:string)
+
+# Object Property: <http://purl.obolibrary.org/obo/BFO_0000051> (has part)
+
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/BFO_0000051> "has part"^^xsd:string)
+
+# Object Property: <http://purl.obolibrary.org/obo/RO_0000052> (inheres in)
+
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/RO_0000052> "inheres in"^^xsd:string)
+SubObjectPropertyOf(<http://purl.obolibrary.org/obo/RO_0000052> <http://purl.obolibrary.org/obo/RO_0002502>)
+
+# Object Property: <http://purl.obolibrary.org/obo/RO_0002502> (depends on)
+
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/RO_0002502> "depends on"^^xsd:string)
+SubObjectPropertyOf(<http://purl.obolibrary.org/obo/RO_0002502> <http://purl.obolibrary.org/obo/UPHENO_0000001>)
+
+# Object Property: <http://purl.obolibrary.org/obo/UPHENO_0000001> (has phenotype affecting)
+
+AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/UPHENO_0000001> "has phenotype affecting"^^xsd:string)
+
+
+
+############################
 #   Classes
 ############################
 
-# Class: <http://purl.obolibrary.org/obo/PATO_0000470> (increased amount)
+# Class: <http://purl.obolibrary.org/obo/PATO_0000470> (<http://purl.obolibrary.org/obo/PATO_0000470>)
 
 EquivalentClasses(<http://purl.obolibrary.org/obo/PATO_0000470> ObjectHasSelf(:increasedAmountRole))
 
-# Class: <http://purl.obolibrary.org/obo/PATO_0001997> (decreased amount)
+# Class: <http://purl.obolibrary.org/obo/PATO_0001997> (<http://purl.obolibrary.org/obo/PATO_0001997>)
 
 EquivalentClasses(<http://purl.obolibrary.org/obo/PATO_0001997> ObjectHasSelf(:decreasedAmountRole))
 
 
+SubObjectPropertyOf(ObjectPropertyChain(<http://purl.obolibrary.org/obo/BFO_0000051> <http://purl.obolibrary.org/obo/RO_0002502>) <http://purl.obolibrary.org/obo/UPHENO_0000001>)
 SubObjectPropertyOf(ObjectPropertyChain(<http://purl.obolibrary.org/obo/BFO_0000051> :is_decrease_of) :is_decrease_of)
 SubObjectPropertyOf(ObjectPropertyChain(<http://purl.obolibrary.org/obo/BFO_0000051> :is_increase_of) :is_increase_of)
+SubObjectPropertyOf(ObjectPropertyChain(<http://purl.obolibrary.org/obo/UPHENO_0000001> <http://purl.obolibrary.org/obo/BFO_0000050>) <http://purl.obolibrary.org/obo/UPHENO_0000001>)
 SubObjectPropertyOf(ObjectPropertyChain(:decreasedAmountRole <http://purl.obolibrary.org/obo/RO_0000052>) :is_decrease_of)
 SubObjectPropertyOf(ObjectPropertyChain(:increasedAmountRole <http://purl.obolibrary.org/obo/RO_0000052>) :is_increase_of)
 )
