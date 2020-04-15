@@ -10,22 +10,11 @@ mirror: ontologies.ofn
 	rm -rf $@ &&\
 	$(ROBOT) mirror -i $< -d $@ -o $@/catalog-v001.xml
 
-ontologies-merged.ttl: ontologies.ofn mirror efo-base.ttl
-	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< -i efo-base.ttl -i ubergraph-axioms.ofn \
+ontologies-merged.ttl: ontologies.ofn mirror
+	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< -i ubergraph-axioms.ofn \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
-
-efo.owl:
-	curl -L -O 'http://www.ebi.ac.uk/efo/efo.owl'
-
-efo-base.ttl: efo.owl
-	$(ROBOT) remove --input $< \
-		--base-iri 'http://www.ebi.ac.uk/efo/EFO_' \
-		--axioms external \
-		--preserve-structure false \
-		--trim false \
-		--output $@
 
 subclass_closure.ttl: ontologies-merged.ttl subclass_closure.rq
 	$(ROBOT) query -i $< --construct subclass_closure.rq $@
