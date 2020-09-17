@@ -8,8 +8,10 @@ Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
 
 Ontology(<http://translator.renci.org/ubergraph-axioms.ofn>
 
+Declaration(Class(<http://purl.obolibrary.org/obo/HP_0000118>))
 Declaration(Class(<http://purl.obolibrary.org/obo/PATO_0000470>))
 Declaration(Class(<http://purl.obolibrary.org/obo/PATO_0001997>))
+Declaration(Class(<http://purl.obolibrary.org/obo/UPHENO_0001001>))
 Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/BFO_0000050>))
 Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/BFO_0000051>))
 Declaration(ObjectProperty(<http://purl.obolibrary.org/obo/RO_0000052>))
@@ -51,6 +53,10 @@ AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/UPHENO_0000001> "
 ############################
 #   Classes
 ############################
+
+# Class: <http://purl.obolibrary.org/obo/HP_0000118> (<http://purl.obolibrary.org/obo/HP_0000118>)
+
+SubClassOf(<http://purl.obolibrary.org/obo/HP_0000118> <http://purl.obolibrary.org/obo/UPHENO_0001001>)
 
 # Class: <http://purl.obolibrary.org/obo/PATO_0000470> (<http://purl.obolibrary.org/obo/PATO_0000470>)
 
