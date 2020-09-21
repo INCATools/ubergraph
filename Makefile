@@ -10,8 +10,19 @@ mirror: ontologies.ofn
 	rm -rf $@ &&\
 	$(ROBOT) mirror -i $< -d $@ -o $@/catalog-v001.xml
 
-ontologies-merged.ttl: ontologies.ofn mirror
-	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< -i ubergraph-axioms.ofn \
+pro_nonreasoned.obo:
+	curl -L -O 'https://proconsortium.org/download/current/pro_nonreasoned.obo'
+
+pr-base.ttl: pro_nonreasoned.obo
+	$(ROBOT) remove --input $< \
+		--base-iri 'http://purl.obolibrary.org/obo/PR_' \
+		--axioms external \
+		--preserve-structure false \
+		--trim false \
+		--output $@
+
+ontologies-merged.ttl: ontologies.ofn mirror pr-base.ttl
+	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< -i pr-base.ttl -i ubergraph-axioms.ofn \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
