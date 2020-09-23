@@ -1,7 +1,7 @@
 ROBOT_ENV=ROBOT_JAVA_ARGS=-Xmx120G
 ROBOT=$(ROBOT_ENV) robot
-NCIT_UTILS_ENV=JAVA_OPTS=-Xmx120G
-NCIT_UTILS=$(NCIT_UTILS_ENV) ncit-utils
+RG_ENV=JAVA_OPTS=-Xmx120G
+RG=$(RG_ENV) relation-graph
 BG_RUNNER=JAVA_OPTS=-Xmx50G blazegraph-runner
 
 all: ubergraph.jnl
@@ -34,7 +34,7 @@ is_defined_by.ttl: ontologies-merged.ttl
 	$(ROBOT) query -i $< --construct isDefinedBy.rq $@
 
 properties-nonredundant.ttl: ontologies-merged.ttl
-	$(NCIT_UTILS) materialize-property-expressions ontologies-merged.ttl properties-nonredundant.ttl properties-redundant.ttl &&\
+	$(RG) --ontology-file ontologies-merged.ttl --non-redundant-output-file properties-nonredundant.ttl --redundant-output-file properties-redundant.ttl &&\
 	touch properties-redundant.ttl
 
 properties-redundant.ttl: properties-nonredundant.ttl
