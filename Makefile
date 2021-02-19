@@ -3,6 +3,8 @@ ROBOT=$(ROBOT_ENV) robot
 RG_ENV=JAVA_OPTS=-Xmx120G
 RG=$(RG_ENV) relation-graph
 BG_RUNNER=JAVA_OPTS=-Xmx50G blazegraph-runner
+JVM_ARGS=JVM_ARGS=-Xmx120G
+ARQ=$(JVM_ARGS) arq
 
 all: ubergraph.jnl
 
@@ -28,10 +30,10 @@ ontologies-merged.ttl: ontologies.ofn mirror pr-base.ttl
 	reason -r ELK -D debug.ofn -o $@
 
 subclass_closure.ttl: ontologies-merged.ttl subclass_closure.rq
-	$(ROBOT) query -i $< --construct subclass_closure.rq $@
+	$(ARQ) -q --data=$< --query=subclass_closure.rq --results=ttl --optimize=off >$@
 
-is_defined_by.ttl: ontologies-merged.ttl
-	$(ROBOT) query -i $< --construct isDefinedBy.rq $@
+is_defined_by.ttl: ontologies-merged.ttl isDefinedBy.rq
+	$(ARQ) -q --data=$< --query=isDefinedBy.rq --results=ttl >$@
 
 properties-nonredundant.ttl: ontologies-merged.ttl
 	$(RG) --ontology-file ontologies-merged.ttl --non-redundant-output-file properties-nonredundant.ttl --redundant-output-file properties-redundant.ttl &&\
