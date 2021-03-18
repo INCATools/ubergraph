@@ -48,6 +48,14 @@ SubObjectPropertyOf(<http://purl.obolibrary.org/obo/RO_0002502> <http://purl.obo
 
 AnnotationAssertion(rdfs:label <http://purl.obolibrary.org/obo/UPHENO_0000001> "has phenotype affecting"^^xsd:string)
 
+# Object Property: :is_decrease_of (is decrease of)
+
+AnnotationAssertion(rdfs:label :is_decrease_of "is decrease of"^^xsd:string)
+
+# Object Property: :is_increase_of (is increase of)
+
+AnnotationAssertion(rdfs:label :is_increase_of "is increase of"^^xsd:string)
+
 
 
 ############################
