@@ -1,4 +1,5 @@
-# Ubergraph
+# Ubergraph [![image](https://user-images.githubusercontent.com/112839/112872474-563aac00-90b8-11eb-8a53-2ca19672f2a4.png)](https://doi.org/10.5281/zenodo.4641309)
+
 Integrated OBO ontology store
 
 - Merged set of mutually referential OBO ontologies:
