@@ -44,19 +44,27 @@ properties-redundant.ttl: properties-nonredundant.ttl
 antonyms_HP.txt:
 	curl -L https://raw.githubusercontent.com/Phenomics/phenopposites/master/opposites/antonyms_HP.txt -o $@
 
+lexically-derived-opposites.nt:
+	curl -L "https://raw.githubusercontent.com/NCATSTranslator/opposites/main/assertions/results/lexically-derived-opposites/lexically-derived-opposites.nt" -o $@
+
+lexically-derived-opposites-inverse.nt: lexically-derived-opposites.nt
+	awk '{ print $$3, $$2, $$1, "."; } ' $< >$@
+
 opposites.ttl: antonyms_HP.txt
 	echo "@prefix HP: <http://purl.obolibrary.org/obo/HP_> ." >$@
-	awk 'NR > 2 { print $$1, "<http://purl.obolibrary.org/obo/RO_0002604>", $$2, "."}; NR > 2 { print $$2, "<http://reasoner.renci.org/opposite_of>", $$1, "."; } ' antonyms_HP.txt >>$@
+	awk 'NR > 2 { print $$1, "<http://purl.obolibrary.org/obo/RO_0002604>", $$2, "."}; NR > 2 { print $$2, "<http://purl.obolibrary.org/obo/RO_0002604>", $$1, "."; } ' antonyms_HP.txt >>$@
 
 # This includes a hack to workaround JSON-LD context problems with biolink
 biolink-model.ttl:
 	curl -L 'https://raw.githubusercontent.com/biolink/biolink-model/master/biolink-model.ttl' -o $@.tmp
 	sed -E 's/<https:\/\/w3id.org\/biolink\/vocab\/([^[:space:]][^[:space:]]*):/<http:\/\/purl.obolibrary.org\/obo\/\1_/g' $@.tmp >$@
 
-ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.ttl properties-redundant.ttl opposites.ttl biolink-model.ttl
+ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.ttl properties-redundant.ttl opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl
 	rm -f $@ &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites.nt &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites-inverse.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='https://biolink.github.io/biolink-model/' biolink-model.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' is_defined_by.ttl &&\
