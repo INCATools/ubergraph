@@ -20,6 +20,7 @@ Integrated OBO ontology store
   - NCBI Taxonomy (slim version)
   - Experimental Factor Ontology (EFO)
   - Protein Ontology (PRO)
+  - NCIt OBO Edition (NCIT)
 - Precomputed OWL classification (class hierarchy)
 - Materialized “class relations” from existential property restrictions (in separate named graphs)
 - Blazegraph RDF triplestore; SPARQL query interface
