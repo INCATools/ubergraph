@@ -5,6 +5,7 @@ RG=$(RG_ENV) relation-graph
 BG_RUNNER=JAVA_OPTS=-Xmx50G blazegraph-runner
 JVM_ARGS=JVM_ARGS=-Xmx120G
 ARQ=$(JVM_ARGS) arq
+BIOLINK=1.8.2
 
 all: ubergraph.jnl
 
@@ -56,7 +57,7 @@ opposites.ttl: antonyms_HP.txt
 
 # This includes a hack to workaround JSON-LD context problems with biolink
 biolink-model.ttl:
-	curl -L 'https://raw.githubusercontent.com/biolink/biolink-model/master/biolink-model.ttl' -o $@.tmp
+	curl -L 'https://raw.githubusercontent.com/biolink/biolink-model/$BIOLINK/biolink-model.ttl' -o $@.tmp
 	sed -E 's/<https:\/\/w3id.org\/biolink\/vocab\/([^[:space:]][^[:space:]]*):/<http:\/\/purl.obolibrary.org\/obo\/\1_/g' $@.tmp >$@
 
 ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.ttl properties-redundant.ttl opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl
