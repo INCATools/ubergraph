@@ -1,0 +1,16 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX linkml: <https://w3id.org/linkml/>
+PREFIX bl: <https://w3id.org/biolink/vocab/>
+
+SELECT DISTINCT ?term (MIN(?label) AS ?name) (GROUP_CONCAT(?category ; separator="|") AS ?categories)
+WHERE {
+  ?term rdf:type owl:Class .
+  ?term rdfs:label ?label .
+  ?term rdfs:subClassOf/^(skos:mappingRelation|skos:exactMatch|skos:narrowMatch)/(linkml:is_a|linkml:mixins)* ?category .
+  ?category (linkml:is_a|linkml:mixins)* bl:NamedThing .
+  FILTER(isIRI(?term))
+} 
+GROUP BY ?term
