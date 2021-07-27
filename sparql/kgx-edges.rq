@@ -1,0 +1,21 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX linkml: <https://w3id.org/linkml/>
+PREFIX bl: <https://w3id.org/biolink/vocab/>
+
+SELECT DISTINCT ?subject ?predicate ?object ?relation
+WHERE {
+  ?subject ?relation ?object .
+  ?subject rdf:type owl:Class .
+  ?object rdf:type owl:Class .
+  ?relation ^(skos:mappingRelation|skos:exactMatch|skos:narrowMatch)/(linkml:is_a|linkml:mixins)* ?predicate .
+  ?predicate (linkml:is_a|linkml:mixins)* bl:related_to .
+  FILTER(isIRI(?subject))
+  FILTER(isIRI(?object))
+  FILTER NOT EXISTS {
+	?relation ^(skos:mappingRelation|skos:exactMatch|skos:narrowMatch)/(linkml:is_a|linkml:mixins)* ?other_predicate .
+    ?other_predicate (linkml:is_a|linkml:mixins)+ ?predicate .
+    FILTER(?other_predicate != ?predicate)
+ }
+}

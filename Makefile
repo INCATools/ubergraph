@@ -5,7 +5,7 @@ RG=$(RG_ENV) relation-graph
 BG_RUNNER=JAVA_OPTS=-Xmx50G blazegraph-runner
 JVM_ARGS=JVM_ARGS=-Xmx120G
 ARQ=$(JVM_ARGS) arq
-BIOLINK=1.8.2
+BIOLINK=2.1.0
 
 all: ubergraph.jnl
 
@@ -71,3 +71,10 @@ ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl prop
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' is_defined_by.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.ttl
+
+kgx/nodes.tsv: ubergraph.jnl sparql/kgx-nodes.rq
+	mkdir -p kgx
+	$(BG_RUNNER) select --journal=$< --outformat=tsv sparql/kgx-nodes.rq kgx/nodes.tsv
+	$(BG_RUNNER) select --journal=$< --outformat=tsv sparql/kgx-edges.rq kgx/edges.tsv
+
+kgx/edges.tsv: kgx/nodes.tsv
