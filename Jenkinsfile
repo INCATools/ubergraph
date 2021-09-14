@@ -8,6 +8,7 @@ pipeline {
      stages {
          stage('Build') {
              steps {
+                    sh whoami
                     sh "curl -s https://packagecloud.io/install/repositories/souffle-lang/souffle/script.deb.sh | sudo bash && sudo apt-get install -y souffle" 
                     sh "curl -L -O https://github.com/balhoff/blazegraph-runner/releases/download/v1.5/blazegraph-runner-1.5.tgz &&\
   tar -zxf blazegraph-runner-1.5.tgz && mv blazegraph-runner-1.5 blazegraph-runner"
