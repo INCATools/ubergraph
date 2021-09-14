@@ -46,7 +46,7 @@ ontrdf.facts: ontologies-merged.nt
 	sed 's/ /\t/' <$< | sed 's/ /\t/' | sed 's/ \.$//' >$@
 
 properties-nonredundant.nt: rdf.facts ontrdf.facts
-	souffle -c prune.dl && mv nonredundant.csv properties-nonredundant.nt
+	souffle -c prune.dl && mv nonredundant.csv $@
 
 antonyms_HP.txt:
 	curl -L https://raw.githubusercontent.com/Phenomics/phenopposites/master/opposites/antonyms_HP.txt -o $@
