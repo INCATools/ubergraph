@@ -24,26 +24,26 @@ pr-base.ttl: pro_nonreasoned.obo
 		--trim false \
 		--output $@
 
-ontologies-merged.nt: ontologies.ofn mirror pr-base.ttl
+ontologies-merged.ttl: ontologies.ofn mirror pr-base.ttl
 	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< -i pr-base.ttl -i ubergraph-axioms.ofn \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
 
-subclass_closure.ttl: ontologies-merged.nt subclass_closure.rq
+subclass_closure.ttl: ontologies-merged.ttl subclass_closure.rq
 	$(ARQ) -q --data=$< --query=subclass_closure.rq --results=ttl --optimize=off >$@
 
-is_defined_by.ttl: ontologies-merged.nt isDefinedBy.rq
+is_defined_by.ttl: ontologies-merged.ttl isDefinedBy.rq
 	$(ARQ) -q --data=$< --query=isDefinedBy.rq --results=ttl >$@
 
-properties-redundant.nt: ontologies-merged.nt
+properties-redundant.nt: ontologies-merged.ttl
 	$(RG) --ontology-file $< --non-redundant-output-file properties-nonredundant-old.ttl --redundant-output-file $@
 
 rdf.facts: properties-redundant.nt
 	sed 's/ /\t/' <$< | sed 's/ /\t/' | sed 's/ \.$//' >$@
 
-ontrdf.facts: ontologies-merged.nt
-	sed 's/ /\t/' <$< | sed 's/ /\t/' | sed 's/ \.$//' >$@
+ontrdf.facts: ontologies-merged.ttl
+	riot --output=ntriples $< | sed 's/ /\t/' <$< | sed 's/ /\t/' | sed 's/ \.$//' >$@
 
 properties-nonredundant.nt: rdf.facts ontrdf.facts
 	souffle -c prune.dl && mv nonredundant.csv $@
@@ -66,9 +66,9 @@ biolink-model.ttl:
 	curl -L 'https://raw.githubusercontent.com/biolink/biolink-model/$(BIOLINK)/biolink-model.ttl' -o $@.tmp
 	riot --syntax=turtle --output=ntriples $@.tmp | sed -E 's/<https:\/\/w3id.org\/biolink\/vocab\/([^[:space:]][^[:space:]]*):/<http:\/\/purl.obolibrary.org\/obo\/\1_/g' >$@
 
-ubergraph.jnl: ontologies-merged.nt subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl
+ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl
 	rm -f $@ &&\
-	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.nt &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites-inverse.nt &&\
