@@ -43,7 +43,7 @@ rdf.facts: properties-redundant.nt
 	sed 's/ /\t/' <$< | sed 's/ /\t/' | sed 's/ \.$//' >$@
 
 ontrdf.facts: ontologies-merged.ttl
-	riot --output=ntriples $< | sed 's/ /\t/' <$< | sed 's/ /\t/' | sed 's/ \.$//' >$@
+	riot --output=ntriples $< | sed 's/ /\t/' | sed 's/ /\t/' | sed 's/ \.$//' >$@
 
 properties-nonredundant.nt: rdf.facts ontrdf.facts
 	souffle -c prune.dl && mv nonredundant.csv $@
