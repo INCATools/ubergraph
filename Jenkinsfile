@@ -8,8 +8,6 @@ pipeline {
      stages {
          stage('Build') {
              steps {
-                    sh "souffle --version"
-                    sh "relation-graph --help"
                     sh 'make -j 4 all'
              }
          }
