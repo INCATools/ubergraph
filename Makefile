@@ -62,9 +62,10 @@ opposites.ttl: antonyms_HP.txt
 	awk 'NR > 2 { print $$1, "<http://purl.obolibrary.org/obo/RO_0002604>", $$2, "."}; NR > 2 { print $$2, "<http://purl.obolibrary.org/obo/RO_0002604>", $$1, "."; } ' antonyms_HP.txt >>$@
 
 # This includes a hack to workaround JSON-LD context problems with biolink
+# The conversion back to turtle works around a problem with Blazegraph parsing on Java 11
 biolink-model.ttl:
 	curl -L 'https://raw.githubusercontent.com/biolink/biolink-model/$(BIOLINK)/biolink-model.ttl' -o $@.tmp
-	riot --syntax=turtle --output=ntriples $@.tmp | sed -E 's/<https:\/\/w3id.org\/biolink\/vocab\/([^[:space:]][^[:space:]]*):/<http:\/\/purl.obolibrary.org\/obo\/\1_/g' >$@
+	riot --syntax=turtle --output=ntriples $@.tmp | sed -E 's/<https:\/\/w3id.org\/biolink\/vocab\/([^[:space:]][^[:space:]]*):/<http:\/\/purl.obolibrary.org\/obo\/\1_/g' | riot --syntax=ntriples --output=turtle >$@
 
 ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl
 	rm -f $@ &&\
