@@ -36,7 +36,7 @@ SPARQL endpoint: `https://stars-app.renci.org/ubergraph/sparql`
 The Ubergraph triplestore is organized into several named graphs.
 
 - `http://reasoner.renci.org/ontology` — All the merged axioms from the input ontologies (logical axioms and annotation axioms), classified using `robot reason -r ELK`. Disjointness axioms are removed prior to reasoning. Include this graph if you want term labels.
-- `http://reasoner.renci.org/redundant` — The complete inference closure for all subclass and existential relations. This includes all transitive, reflexive subclass relations. Within this graph, all predicates with the exception of `rdfs:subClassOf` imply an OWL existential relationship. For example, within this graph, the triple:
+- `http://reasoner.renci.org/redundant` — The complete inference closure for all subclass and existential relations. This includes all transitive, reflexive subclass relations. Within this graph, all predicates with the exception of `rdfs:subClassOf` imply an OWL existential relationship. For example, the triple:
    - `CL:0000080 BFO:0000050 UBERON:0000179` ([circulating cell](http://purl.obolibrary.org/obo/CL_0000080) • [part of](http://purl.obolibrary.org/obo/BFO_0000050) • [haemolymphatic fluid](http://purl.obolibrary.org/obo/UBERON_0000179))
    
    is shorthand for the OWL axiom
