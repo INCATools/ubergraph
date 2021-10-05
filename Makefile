@@ -72,13 +72,14 @@ biolink-model.ttl:
 	grep -v 'http://www.w3.org/2001/XMLSchema#dateTime' |\
 	riot --syntax=ntriples --output=turtle >$@
 
-ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl
+ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl sparql/biolink-categories.ru
 	rm -f $@ &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites-inverse.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='https://biolink.github.io/biolink-model/' biolink-model.ttl &&\
+	$(BG_RUNNER) update --journal=$@ sparql/biolink-categories.ru
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' is_defined_by.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.nt &&\
