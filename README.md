@@ -9,6 +9,8 @@
   - Biospatial Ontology (BSPO)
   - Phenotype and Trait Ontology (PATO)
   - Human Phenotype Ontology (HPO)
+  - Mammalian Phenotype Ontology (MP)
+  - Fission Yeast Phenotype Ontology (FYPO)
   - Monarch Disease Ontology (MONDO)
   - Chemical Entities of Biological Interest (ChEBI)
   - Relations Ontology (RO)
