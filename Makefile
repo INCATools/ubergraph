@@ -79,6 +79,7 @@ biolink-model.ttl:
 	riot --syntax=turtle --output=ntriples $@.tmp |\
 	sed -E 's/<https:\/\/w3id.org\/biolink\/vocab\/([^[:space:]][^[:space:]]*):/<http:\/\/purl.obolibrary.org\/obo\/\1_/g' |\
 	grep -v 'http://www.w3.org/2001/XMLSchema#dateTime' |\
+	grep -v 'xsd:dateTime' |\
 	riot --syntax=ntriples --output=turtle >$@
 
 ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl sparql/biolink-categories.ru information-content.nt
