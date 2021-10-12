@@ -13,6 +13,7 @@
 .decl maxIC(n: float)
 .decl normalizedIC(term: symbol, ic: float)
 .decl icRDF(term: symbol, predicate: symbol, ic: float, dot: symbol)
+.decl scRDF(term: symbol, predicate: symbol, c: number, dot: symbol)
 
 subClassOf(sub, super) :- rdf(sub, RDFS_SUBCLASS_OF, super).
 
@@ -28,6 +29,9 @@ normalizedIC(t, (-@logn(@asDouble(c)/@asDouble(total)))*scale) :- subClassCount(
 
 icRDF(term, HAS_NORMALIZED_IC, ic, ".") :- normalizedIC(term, ic).
 
+scRDF(term, SUBCLASS_COUNT, c, ".") :- subClassCount(term, c).
+
 // sed 's/ /\t/' <ontology.nt | sed 's/ /\t/' | sed 's/ \.$//' >rdf.facts
 .input rdf
 .output icRDF
+.output scRDF
