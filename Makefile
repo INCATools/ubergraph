@@ -45,8 +45,17 @@ rdf.facts: properties-redundant.nt
 ontrdf.facts: ontologies-merged.ttl
 	riot --output=ntriples $< | sed 's/ /\t/' | sed 's/ /\t/' | sed 's/ \.$$//' >$@
 
-properties-nonredundant.nt: rdf.facts ontrdf.facts
+properties-nonredundant.nt: rdf.facts ontrdf.facts prune.dl
 	souffle -c prune.dl && mv nonredundant.csv $@
+
+functors.o: functors.cpp
+	g++ functors.cpp -c -fPIC -o functors.o
+
+libfunctors.so: functors.o
+	g++ -shared -o libfunctors.so functors.o
+
+information-content.nt: rdf.facts libfunctors.so ic.dl
+	souffle -l functors -c ic.dl && mv icRDF.csv $@
 
 antonyms_HP.txt:
 	curl -L https://raw.githubusercontent.com/Phenomics/phenopposites/master/opposites/antonyms_HP.txt -o $@
@@ -72,7 +81,7 @@ biolink-model.ttl:
 	grep -v 'http://www.w3.org/2001/XMLSchema#dateTime' |\
 	riot --syntax=ntriples --output=turtle >$@
 
-ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl sparql/biolink-categories.ru
+ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl sparql/biolink-categories.ru information-content.nt
 	rm -f $@ &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
@@ -82,6 +91,7 @@ ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl prop
 	$(BG_RUNNER) update --journal=$@ sparql/biolink-categories.ru
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' is_defined_by.ttl &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' information-content.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.nt
 
