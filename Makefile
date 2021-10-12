@@ -55,7 +55,7 @@ libfunctors.so: functors.o
 	g++ -shared -o libfunctors.so functors.o
 
 information-content.nt: rdf.facts libfunctors.so ic.dl
-	souffle -l functors -c ic.dl && mv icRDF.csv $@ && cat scRDF.csv >>$@
+	souffle -l functors -c ic.dl && cat icRDF.csv scRDF.csv >$@
 
 antonyms_HP.txt:
 	curl -L https://raw.githubusercontent.com/Phenomics/phenopposites/master/opposites/antonyms_HP.txt -o $@
