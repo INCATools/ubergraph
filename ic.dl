@@ -1,6 +1,6 @@
 #define RDFS_SUBCLASS_OF "<http://www.w3.org/2000/01/rdf-schema#subClassOf>"
-#define SUBCLASS_COUNT "http://reasoner.renci.org/vocab/subClassCount"
-#define HAS_NORMALIZED_IC "http://reasoner.renci.org/vocab/normalizedInformationContent"
+#define SUBCLASS_COUNT "<http://reasoner.renci.org/vocab/subClassCount>"
+#define HAS_NORMALIZED_IC "<http://reasoner.renci.org/vocab/normalizedInformationContent>"
 
 .functor logn(x: float): float
 .functor asDouble(x: number): float
@@ -27,7 +27,7 @@ maxIC(-@logn(1.0/@asDouble(n))) :- totalTerms(n).
 
 normalizedIC(t, (-@logn(@asDouble(c)/@asDouble(total)))*scale) :- subClassCount(t, c), totalTerms(total), maxIC(maxic), scale=100.0/maxic.
 
-icRDF(term, HAS_NORMALIZED_IC, ic, ".") :- normalizedIC(term, ic).
+icRDF(term, HAS_NORMALIZED_IC, cat(cat("\"", to_string(ic)), "\"^^<http://www.w3.org/2001/XMLSchema#decimal>"), ".") :- normalizedIC(term, ic).
 
 scRDF(term, SUBCLASS_COUNT, c, ".") :- subClassCount(term, c).
 

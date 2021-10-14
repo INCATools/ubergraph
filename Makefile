@@ -54,7 +54,7 @@ functors.o: functors.cpp
 libfunctors.so: functors.o
 	g++ -shared -o libfunctors.so functors.o
 
-information-content.nt: rdf.facts libfunctors.so ic.dl
+information-content.ttl: rdf.facts libfunctors.so ic.dl
 	souffle -l functors -c ic.dl && cat icRDF.csv scRDF.csv >$@
 
 antonyms_HP.txt:
@@ -82,7 +82,7 @@ biolink-model.ttl:
 	grep -v 'xsd:dateTime' |\
 	riot --syntax=ntriples --output=turtle >$@
 
-ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl sparql/biolink-categories.ru information-content.nt
+ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl sparql/biolink-categories.ru information-content.ttl
 	rm -f $@ &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
@@ -92,7 +92,7 @@ ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl prop
 	$(BG_RUNNER) update --journal=$@ sparql/biolink-categories.ru
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' is_defined_by.ttl &&\
-	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' information-content.nt &&\
+	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' information-content.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.nt
 
