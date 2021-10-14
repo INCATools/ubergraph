@@ -12,7 +12,7 @@
 .decl subClassCount(term: symbol, c: number)
 .decl maxIC(n: float)
 .decl normalizedIC(term: symbol, ic: float)
-.decl icRDF(term: symbol, predicate: symbol, ic: float, dot: symbol)
+.decl icRDF(term: symbol, predicate: symbol, ic: symbol, dot: symbol)
 .decl scRDF(term: symbol, predicate: symbol, c: number, dot: symbol)
 
 subClassOf(sub, super) :- rdf(sub, RDFS_SUBCLASS_OF, super).
