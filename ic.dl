@@ -3,7 +3,6 @@
 #define HAS_NORMALIZED_IC "<http://reasoner.renci.org/vocab/normalizedInformationContent>"
 
 .functor logn(x: float): float
-.functor asDouble(x: number): float
 
 .decl rdf(s: symbol, p: symbol, o: symbol)
 .decl subClassOf(sub: symbol, super: symbol)
@@ -12,7 +11,7 @@
 .decl subClassCount(term: symbol, c: number)
 .decl maxIC(n: float)
 .decl normalizedIC(term: symbol, ic: float)
-.decl icRDF(term: symbol, predicate: symbol, ic: symbol, dot: symbol)
+.decl icRDF(term: symbol, predicate: symbol, ic: float, dot: symbol)
 .decl scRDF(term: symbol, predicate: symbol, c: number, dot: symbol)
 
 subClassOf(sub, super) :- rdf(sub, RDFS_SUBCLASS_OF, super).
@@ -23,11 +22,11 @@ totalTerms(c) :- c = count : { term(_) }.
 
 subClassCount(t, c) :- term(t), c = count : { subClassOf(_, t) }.
 
-maxIC(-@logn(1.0/@asDouble(n))) :- totalTerms(n).
+maxIC(-@logn(1.0/to_float(n))) :- totalTerms(n).
 
-normalizedIC(t, (-@logn(@asDouble(c)/@asDouble(total)))*scale) :- subClassCount(t, c), totalTerms(total), maxIC(maxic), scale=100.0/maxic.
+normalizedIC(t, (-@logn(to_float(c)/to_float(total)))*scale) :- subClassCount(t, c), totalTerms(total), maxIC(maxic), scale=100.0/maxic.
 
-icRDF(term, HAS_NORMALIZED_IC, cat(cat("\"", to_string(ic)), "\"^^<http://www.w3.org/2001/XMLSchema#decimal>"), ".") :- normalizedIC(term, ic).
+icRDF(term, HAS_NORMALIZED_IC, ic, ".") :- normalizedIC(term, ic).
 
 scRDF(term, SUBCLASS_COUNT, c, ".") :- subClassCount(term, c).
 
