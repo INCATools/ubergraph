@@ -26,8 +26,8 @@ transitive(prop) :- ontrdf(prop, RDF_TYPE, OWL_TRANSITIVE_PROPERTY).
 subPropertyOf(sub, as(super, Node)) :- ontrdf(sub, RDFS_SUBPROPERTY_OF, super), sub != super.
 subPropertyOf(sub, as(supersuper, Node)) :- subPropertyOf(sub, super), ontrdf(super, RDFS_SUBPROPERTY_OF, supersuper), super != supersuper, sub != supersuper.
 
-redundant(s, p, o) :- rdf(s, p, other), subClassOf(other, o), rdf(s, p, o).
-redundant(s, p, o) :- rdf(s, p, o), subClassOf(s, other), rdf(other, p, o).
+redundant(s, p, o) :- rdf(s, p, other), s != other, !equivalent(s, other), subClassOf(other, o), rdf(s, p, o).
+redundant(s, p, o) :- rdf(s, p, o), subClassOf(s, other), rdf(other, p, o), other != o, !equivalent(other, o).
 redundant(s, p, o) :- rdf(s, p, o), transitive(p), rdf(s, p, other), other != o, rdf(other, p, o).
 redundant(s, p, o) :- rdf(s, p, o), subPropertyOf(sub, p), rdf(s, sub, o).
 redundant(s, RDFS_SUBCLASS_OF, s) :- rdf(s, RDFS_SUBCLASS_OF, s).
