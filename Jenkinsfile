@@ -4,6 +4,9 @@ pipeline {
             image 'monarchinitiative/ubergraph'
             label 'zeppo'
         }
+        triggers {
+                cron('H 0 * * 5')
+        }
     }
      stages {
          stage('Build') {
