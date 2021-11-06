@@ -110,7 +110,7 @@ kgx/edges.tsv: kgx/nodes.tsv
 #### Commands for building the Docker image ####
 ################################################
 
-VERSION = "0.0.1"
+VERSION = "1.0"
 IM=monarchinitiative/ubergraph
 
 docker-build-no-cache:
