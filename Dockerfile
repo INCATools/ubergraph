@@ -18,7 +18,7 @@ RUN wget -nv https://github.com/balhoff/blazegraph-runner/releases/download/v$BR
 && chmod +x /tools/blazegraph-runner
 
 ###### relation-graph #####
-ENV RG=1.2.1
+ENV RG=2.0
 ENV PATH "/tools/relation-graph/bin:$PATH"
 RUN wget -nv https://github.com/balhoff/relation-graph/releases/download/v$RG/relation-graph-$RG.tgz \
 && tar -zxvf relation-graph-$RG.tgz \

@@ -37,7 +37,7 @@ is_defined_by.ttl: ontologies-merged.ttl isDefinedBy.rq
 	$(ARQ) -q --data=$< --query=isDefinedBy.rq --results=ttl >$@
 
 properties-redundant.nt: ontologies-merged.ttl
-	$(RG) --ontology-file $< --non-redundant-output-file properties-nonredundant-old.ttl --redundant-output-file $@
+	$(RG) --ontology-file $< --output-subclasses true --output-file $@
 
 rdf.facts: properties-redundant.nt
 	sed 's/ /\t/' <$< | sed 's/ /\t/' | sed 's/ \.$$//' >$@
@@ -110,7 +110,7 @@ kgx/edges.tsv: kgx/nodes.tsv
 #### Commands for building the Docker image ####
 ################################################
 
-VERSION = "1.0"
+VERSION = "1.1"
 IM=monarchinitiative/ubergraph
 
 docker-build-no-cache:
