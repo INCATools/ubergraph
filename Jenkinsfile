@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'monarchinitiative/ubergraph'
+            image 'monarchinitiative/ubergraph:1.1'
             label 'zeppo'
         }
         triggers {
