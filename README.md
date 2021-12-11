@@ -2,7 +2,7 @@
 
 ## Integrated OBO ontology triplestore
 
-- Merged set of mutually referential OBO ontologies:
+- Merged set of mutually referential [OBO](https://obofoundry.org) ontologies:
   - Uberon anatomy
   - Cell Ontology (CL)
   - Gene Ontology (GO)
