@@ -30,8 +30,8 @@
 
 ## Query
 
-SPARQL endpoint: `https://stars-app.renci.org/ubergraph/sparql`
-- Query interface in YASGUI: https://api.triplydb.com/s/_26lcKdBY
+SPARQL endpoint: `https://ubergraph.apps.renci.org/sparql`
+- Query interface in YASGUI: https://api.triplydb.com/s/e5aK9EOKg
 
 ## Graph organization
 
