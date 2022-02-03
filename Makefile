@@ -8,7 +8,6 @@ ARQ=$(JVM_ARGS) arq
 BIOLINK=2.2.4
 
 ONTOLOGIES := $(shell cat "ontologies.txt")
-ONTOLOGY_FILES := $(addprefix mirror/,$(ONTOLOGIES))
 
 all: ubergraph.jnl
 
@@ -30,7 +29,7 @@ pr-base.owl: pro_nonreasoned.obo
 		--output $@
 
 ontologies-merged.ttl: mirror
-	$(ROBOT) merge $(addprefix -i ,$(ONTOLOGY_FILES)) -i mirror/pr-base.owl -i mirror/ubergraph-axioms.owl \
+	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) -i mirror/pr-base.owl -i mirror/ubergraph-axioms.owl \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
