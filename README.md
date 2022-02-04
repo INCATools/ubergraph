@@ -5,6 +5,7 @@
 - Merged set of mutually referential [OBO](https://obofoundry.org) ontologies:
   - Uberon anatomy
   - Cell Ontology (CL)
+  - Provisional Cell Ontology (PCL)
   - Gene Ontology (GO)
   - Biospatial Ontology (BSPO)
   - Phenotype and Trait Ontology (PATO)
