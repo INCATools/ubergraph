@@ -88,7 +88,7 @@ biolink-model.ttl:
 	grep -v 'xsd:dateTime' |\
 	riot --syntax=ntriples --output=turtle >$@
 
-ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl sparql/biolink-categories.ru information-content.ttl
+ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl build-sparql/biolink-categories.ru information-content.ttl
 	rm -f $@ &&\
 	$(BG_RUNNER) load --journal=$@ --informat=rdfxml --use-ontology-graph=true mirror &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
@@ -96,17 +96,17 @@ ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl prop
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites-inverse.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='https://biolink.github.io/biolink-model/' biolink-model.ttl &&\
-	$(BG_RUNNER) update --journal=$@ sparql/biolink-categories.ru
+	$(BG_RUNNER) update --journal=$@ build-sparql/biolink-categories.ru
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' is_defined_by.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' information-content.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.nt
 
-kgx/nodes.tsv: ubergraph.jnl sparql/kgx-nodes.rq
+kgx/nodes.tsv: ubergraph.jnl build-sparql/kgx-nodes.rq
 	mkdir -p kgx
-	$(BG_RUNNER) select --journal=$< --outformat=tsv sparql/kgx-nodes.rq kgx/nodes.tsv
-	$(BG_RUNNER) select --journal=$< --outformat=tsv sparql/kgx-edges.rq kgx/edges.tsv
+	$(BG_RUNNER) select --journal=$< --outformat=tsv build-sparql/kgx-nodes.rq kgx/nodes.tsv
+	$(BG_RUNNER) select --journal=$< --outformat=tsv build-sparql/kgx-edges.rq kgx/edges.tsv
 
 kgx/edges.tsv: kgx/nodes.tsv
 
