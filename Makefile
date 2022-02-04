@@ -29,7 +29,7 @@ pr-base.owl: pro_nonreasoned.obo
 		--output $@
 
 ontologies-merged.ttl: mirror
-	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) -i mirror/pr-base.owl -i mirror/ubergraph-axioms.owl \
+	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
