@@ -18,5 +18,5 @@ http://purl.obolibrary.org/obo/eco/eco-base.owl
 http://purl.obolibrary.org/obo/uberon/bridge/uberon-bridge-to-caro.owl
 http://purl.obolibrary.org/obo/uberon/bridge/cl-bridge-to-caro.owl
 http://purl.obolibrary.org/obo/go/extensions/go-bfo-bridge.owl
-http://purl.obolibrary.org/obo/ncbitaxon/subsets/taxslim.owl
+http://purl.obolibrary.org/obo/ncbitaxon.owl
 https://github.com/EBISPOT/efo/releases/download/current/efo-base.owl
