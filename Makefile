@@ -7,16 +7,20 @@ JVM_ARGS=JVM_ARGS=-Xmx120G
 ARQ=$(JVM_ARGS) arq
 BIOLINK=2.2.4
 
+ONTOLOGIES := $(shell cat "ontologies.txt")
+
 all: ubergraph.jnl
 
-mirror: ontologies.ofn
-	rm -rf $@ &&\
-	$(ROBOT) mirror -i $< -d $@ -o $@/catalog-v001.xml
+mirror: ontologies.txt pr-base.owl ubergraph-axioms.ofn
+	mkdir -p $@ && cd $@ &&\
+	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
+	cp ../pr-base.owl pr-base.owl &&\
+	$(ROBOT) convert -i ../ubergraph-axioms.ofn -o ubergraph-axioms.owl
 
 pro_nonreasoned.obo:
 	curl -L -O 'https://proconsortium.org/download/current/pro_nonreasoned.obo'
 
-pr-base.ttl: pro_nonreasoned.obo
+pr-base.owl: pro_nonreasoned.obo
 	$(ROBOT) remove --input $< \
 		--base-iri 'http://purl.obolibrary.org/obo/PR_' \
 		--axioms external \
@@ -24,8 +28,8 @@ pr-base.ttl: pro_nonreasoned.obo
 		--trim false \
 		--output $@
 
-ontologies-merged.ttl: ontologies.ofn mirror pr-base.ttl
-	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< -i pr-base.ttl -i ubergraph-axioms.ofn \
+ontologies-merged.ttl: mirror
+	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
@@ -86,6 +90,7 @@ biolink-model.ttl:
 
 ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl sparql/biolink-categories.ru information-content.ttl
 	rm -f $@ &&\
+	$(BG_RUNNER) load --journal=$@ --informat=rdfxml --use-ontology-graph=true mirror &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites.nt &&\
