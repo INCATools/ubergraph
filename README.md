@@ -31,7 +31,9 @@
 
 ## Query
 
-SPARQL endpoint: `https://stars-app.renci.org/ubergraph/sparql`
+### SPARQL endpoint
+
+- Service: `https://stars-app.renci.org/ubergraph/sparql`
 - Query interface in YASGUI: https://api.triplydb.com/s/_26lcKdBY
 
 ### grlc API
