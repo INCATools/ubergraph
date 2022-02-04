@@ -13,7 +13,7 @@ all: ubergraph.jnl
 
 mirror: ontologies.txt pr-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
-	xargs -n 1 curl -L -O <../ontologies.txt &&\
+	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
 	cp ../pr-base.owl pr-base.owl &&\
 	$(ROBOT) convert -i ../ubergraph-axioms.ofn -o ubergraph-axioms.owl
 
