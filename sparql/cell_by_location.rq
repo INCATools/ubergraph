@@ -1,6 +1,9 @@
 #+ summary: Find cells by location
 #+ description: Enter an anatomical location, get back a list of cell type IRIs and labels
 
+#+ defaults:
+#+   - _location_iri: http://purl.obolibrary.org/obo/UBERON_0002113
+
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX overlaps: <http://purl.obolibrary.org/obo/RO_0002131>
