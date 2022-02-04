@@ -33,6 +33,10 @@
 SPARQL endpoint: `https://stars-app.renci.org/ubergraph/sparql`
 - Query interface in YASGUI: https://api.triplydb.com/s/_26lcKdBY
 
+### grlc API
+
+Example SPARQL queries are [included in the repo](https://github.com/INCATools/ubergraph/tree/master/sparql), and can be queried via an OpenAPI user interface at http://grlc.io/api/INCAtools/ubergraph/sparql/.
+
 ## Graph organization
 
 The Ubergraph triplestore is organized into several named graphs.
