@@ -8,7 +8,7 @@ PREFIX cell: <http://purl.obolibrary.org/obo/CL_0000000>
 
 SELECT DISTINCT ?cell_iri (STR(?qlabel) as ?cell_label)
 WHERE {
-   ?cell_iri overlaps: ?_anatomical_location .
+   ?cell_iri overlaps: ?_anatomical_location_iri .
    ?cell_iri rdfs:subClassOf cell: .
    ?cell_iri rdfs:label ?qlabel .
   }
