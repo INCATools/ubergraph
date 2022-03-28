@@ -1,0 +1,19 @@
+#+ summary: Find cells by location
+#+ description: Enter an anatomical location, get back a list of cell type IRIs and labels
+
+#+ defaults:
+#+   - location: http://purl.obolibrary.org/obo/UBERON_0002113
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX overlaps: <http://purl.obolibrary.org/obo/RO_0002131>
+PREFIX cell: <http://purl.obolibrary.org/obo/CL_0000000>
+
+SELECT DISTINCT ?cell_iri (STR(?qlabel) as ?cell_label)
+WHERE {
+   ?cell_iri overlaps: ?_location_iri .
+   ?cell_iri rdfs:subClassOf cell: .
+   ?cell_iri rdfs:label ?qlabel .
+  }
+
+

@@ -7,16 +7,20 @@ JVM_ARGS=JVM_ARGS=-Xmx120G
 ARQ=$(JVM_ARGS) arq
 BIOLINK=2.2.4
 
+ONTOLOGIES := $(shell cat "ontologies.txt")
+
 all: ubergraph.jnl
 
-mirror: ontologies.ofn
-	rm -rf $@ &&\
-	$(ROBOT) mirror -i $< -d $@ -o $@/catalog-v001.xml
+mirror: ontologies.txt pr-base.owl ubergraph-axioms.ofn
+	mkdir -p $@ && cd $@ &&\
+	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
+	cp ../pr-base.owl pr-base.owl &&\
+	$(ROBOT) convert -i ../ubergraph-axioms.ofn -o ubergraph-axioms.owl
 
 pro_nonreasoned.obo:
 	curl -L -O 'https://proconsortium.org/download/current/pro_nonreasoned.obo'
 
-pr-base.ttl: pro_nonreasoned.obo
+pr-base.owl: pro_nonreasoned.obo
 	$(ROBOT) remove --input $< \
 		--base-iri 'http://purl.obolibrary.org/obo/PR_' \
 		--axioms external \
@@ -24,8 +28,8 @@ pr-base.ttl: pro_nonreasoned.obo
 		--trim false \
 		--output $@
 
-ontologies-merged.ttl: ontologies.ofn mirror pr-base.ttl
-	$(ROBOT) merge --catalog mirror/catalog-v001.xml --include-annotations true -i $< -i pr-base.ttl -i ubergraph-axioms.ofn \
+ontologies-merged.ttl: mirror
+	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
@@ -84,24 +88,25 @@ biolink-model.ttl:
 	grep -v 'xsd:dateTime' |\
 	riot --syntax=ntriples --output=turtle >$@
 
-ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl sparql/biolink-categories.ru information-content.ttl
+ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl build-sparql/biolink-categories.ru information-content.ttl
 	rm -f $@ &&\
+	$(BG_RUNNER) load --journal=$@ --informat=rdfxml --use-ontology-graph=true mirror &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' ontologies-merged.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' opposites.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites-inverse.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='https://biolink.github.io/biolink-model/' biolink-model.ttl &&\
-	$(BG_RUNNER) update --journal=$@ sparql/biolink-categories.ru
+	$(BG_RUNNER) update --journal=$@ build-sparql/biolink-categories.ru
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' is_defined_by.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' information-content.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.nt
 
-kgx/nodes.tsv: ubergraph.jnl sparql/kgx-nodes.rq
+kgx/nodes.tsv: ubergraph.jnl build-sparql/kgx-nodes.rq
 	mkdir -p kgx
-	$(BG_RUNNER) select --journal=$< --outformat=tsv sparql/kgx-nodes.rq kgx/nodes.tsv
-	$(BG_RUNNER) select --journal=$< --outformat=tsv sparql/kgx-edges.rq kgx/edges.tsv
+	$(BG_RUNNER) select --journal=$< --outformat=tsv build-sparql/kgx-nodes.rq kgx/nodes.tsv
+	$(BG_RUNNER) select --journal=$< --outformat=tsv build-sparql/kgx-edges.rq kgx/edges.tsv
 
 kgx/edges.tsv: kgx/nodes.tsv
 

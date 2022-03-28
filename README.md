@@ -5,6 +5,7 @@
 - Merged set of mutually referential [OBO](https://obofoundry.org) ontologies:
   - Uberon anatomy
   - Cell Ontology (CL)
+  - Provisional Cell Ontology (PCL)
   - Gene Ontology (GO)
   - Biospatial Ontology (BSPO)
   - Phenotype and Trait Ontology (PATO)
@@ -30,8 +31,14 @@
 
 ## Query
 
-SPARQL endpoint: `https://ubergraph.apps.renci.org/sparql`
+### SPARQL endpoint
+
+- Service: `https://ubergraph.apps.renci.org/sparql`
 - Query interface in YASGUI: https://api.triplydb.com/s/e5aK9EOKg
+
+### grlc API
+
+Example SPARQL queries are [included in the repo](https://github.com/INCATools/ubergraph/tree/master/sparql), and can be queried via an OpenAPI user interface at http://grlc.io/api/INCAtools/ubergraph/sparql/.
 
 ## Graph organization
 
