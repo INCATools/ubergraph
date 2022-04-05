@@ -11,11 +11,16 @@ ONTOLOGIES := $(shell cat "ontologies.txt")
 
 all: ubergraph.jnl
 
-mirror: ontologies.txt pr-base.owl ubergraph-axioms.ofn
+mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
 	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
 	cp ../pr-base.owl pr-base.owl &&\
+	cp ../po-base.owl po-base.owl &&\
+	cp ../ppo-base.owl ppo-base.owl &&\
 	$(ROBOT) convert -i ../ubergraph-axioms.ofn -o ubergraph-axioms.owl
+
+# Make pseudo-base version for ontologies that don't provide one
+# TODO add these all to a separate file instead of repeating code
 
 pro_nonreasoned.obo:
 	curl -L -O 'https://proconsortium.org/download/current/pro_nonreasoned.obo'
@@ -23,6 +28,28 @@ pro_nonreasoned.obo:
 pr-base.owl: pro_nonreasoned.obo
 	$(ROBOT) remove --input $< \
 		--base-iri 'http://purl.obolibrary.org/obo/PR_' \
+		--axioms external \
+		--preserve-structure false \
+		--trim false \
+		--output $@
+
+ppo.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/ppo.owl'
+
+ppo-base.owl: ppo.owl
+	$(ROBOT) remove --input $< \
+		--base-iri 'http://purl.obolibrary.org/obo/PPO_' \
+		--axioms external \
+		--preserve-structure false \
+		--trim false \
+		--output $@
+
+po.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/po.owl'
+
+po-base.owl: po.owl
+	$(ROBOT) remove --input $< \
+		--base-iri 'http://purl.obolibrary.org/obo/PO_' \
 		--axioms external \
 		--preserve-structure false \
 		--trim false \
