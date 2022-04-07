@@ -24,6 +24,8 @@
   - Experimental Factor Ontology (EFO)
   - Protein Ontology (PRO)
   - NCIt OBO Edition (NCIT)
+  - Plant Ontology (PO)
+  - Plant Phenology Ontology (PPO)
 - Precomputed OWL classification (class hierarchy)
 - Materialized “class relations” from existential property restrictions (in separate named graphs)
 - Blazegraph RDF triplestore; SPARQL query interface
