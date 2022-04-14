@@ -21,3 +21,6 @@ http://purl.obolibrary.org/obo/go/extensions/go-bfo-bridge.owl
 http://purl.obolibrary.org/obo/ncbitaxon.owl
 https://github.com/EBISPOT/efo/releases/download/current/efo-base.owl
 http://purl.obolibrary.org/obo/pcl/pcl-base.owl
+http://purl.obolibrary.org/obo/fbbt/fbbt-base.owl
+http://purl.obolibrary.org/obo/uberon/bridge/uberon-bridge-to-fbbt.owl
+http://purl.obolibrary.org/obo/uberon/bridge/cl-bridge-to-fbbt.owl
