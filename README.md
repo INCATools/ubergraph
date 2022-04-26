@@ -20,7 +20,7 @@
   - Ontology for Biomedical Investigations (OBI)
   - Medical Action Ontology (MAXO)
   - Evidence and Conclusion Ontology (ECO)
-  - NCBI Taxonomy (slim version)
+  - NCBI Taxonomy
   - Experimental Factor Ontology (EFO)
   - Protein Ontology (PRO)
   - NCIt OBO Edition (NCIT)
