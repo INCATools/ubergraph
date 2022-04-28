@@ -1,6 +1,8 @@
 http://purl.obolibrary.org/obo/bspo.owl
 http://purl.obolibrary.org/obo/chebi.owl
 http://purl.obolibrary.org/obo/cl/cl-base.owl
+http://purl.obolibrary.org/obo/cob/cob-base.owl
+http://purl.obolibrary.org/obo/cob/cob-to-external.owl
 http://purl.obolibrary.org/obo/dpo/dpo-base.owl
 http://purl.obolibrary.org/obo/eco/eco-base.owl
 http://purl.obolibrary.org/obo/ecto/ecto-base.owl
