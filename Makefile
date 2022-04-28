@@ -7,16 +7,19 @@ JVM_ARGS=JVM_ARGS=-Xmx120G
 ARQ=$(JVM_ARGS) arq
 BIOLINK=2.2.4
 
-ONTOLOGIES := $(shell cat "ontologies.txt")
+NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
 
 all: ubergraph.jnl
 
-mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl ubergraph-axioms.ofn
+mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl bto-base.owl mmusdv-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
 	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
 	cp ../pr-base.owl pr-base.owl &&\
 	cp ../po-base.owl po-base.owl &&\
 	cp ../ppo-base.owl ppo-base.owl &&\
+	cp ../apo-base.owl apo-base.owl &&\
+	cp ../bto-base.owl bto-base.owl &&\
+	cp ../mmusdv-base.owl mmusdv-base.owl &&\
 	$(ROBOT) convert -i ../ubergraph-axioms.ofn -o ubergraph-axioms.owl
 
 # Make pseudo-base version for ontologies that don't provide one
@@ -50,6 +53,39 @@ po.owl:
 po-base.owl: po.owl
 	$(ROBOT) remove --input $< \
 		--base-iri 'http://purl.obolibrary.org/obo/PO_' \
+		--axioms external \
+		--preserve-structure false \
+		--trim false \
+		--output $@
+
+apo.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/apo.owl'
+
+apo-base.owl: apo.owl
+	$(ROBOT) remove --input $< \
+		--base-iri 'http://purl.obolibrary.org/obo/APO_' \
+		--axioms external \
+		--preserve-structure false \
+		--trim false \
+		--output $@
+
+bto.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/bto.owl'
+
+bto-base.owl: bto.owl
+	$(ROBOT) remove --input $< \
+		--base-iri 'http://purl.obolibrary.org/obo/BTO_' \
+		--axioms external \
+		--preserve-structure false \
+		--trim false \
+		--output $@
+
+mmusdv.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/mmusdv.owl'
+
+mmusdv-base.owl: mmusdv.owl
+	$(ROBOT) remove --input $< \
+		--base-iri 'http://purl.obolibrary.org/obo/MmusDv_' \
 		--axioms external \
 		--preserve-structure false \
 		--trim false \
