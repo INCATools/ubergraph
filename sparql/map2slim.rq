@@ -1,0 +1,14 @@
+#+ summary: Convert maps to slims
+#+ description: Generate slims from given terms, returns a csv with following column names slim,term,slim_term_iri
+#+ endpoint: https://ubergraph.apps.renci.org/sparql
+#+ defaults:
+#+   - slim: http://purl.obolibrary.org/obo/uberon/core#major_organ
+PREFIX in_subset: <http://www.geneontology.org/formats/oboInOwl#inSubset>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT  distinct ?slim ?term ?slim_term_iri
+WHERE {
+	?_term_iri ?_relation_iri ?slim_term_iri .
+	?slim_term_iri in_subset: ?_slim_iri .
+	bind(?_term_iri as ?term)
+	bind(?_slim_iri as ?slim)
+}
