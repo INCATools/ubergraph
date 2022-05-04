@@ -1,0 +1,15 @@
+#+ summary: Validates given triple existence in the ubergraph
+#+ description: Checks existence of the given subject predicate object triple and return their validation result
+#+ endpoint: https://ubergraph.apps.renci.org/sparql
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT  ?subject_iri ?relation_iri ?object_iri ?validated
+WHERE
+{
+  OPTIONAL { ?_subject_iri ?_relation_iri ?_object_iri }
+  BIND (?_subject_iri as ?subject_iri)
+  BIND (?_relation_iri as ?relation_iri)
+  BIND (?_object_iri as ?object_iri)
+  BIND (exists{?subject_iri ?relation_iri ?object_iri} AS ?boolean)
+  BIND (IF(?boolean, "true", "false") AS ?validated)
+
+}
