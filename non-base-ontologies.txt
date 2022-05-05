@@ -1,5 +1,4 @@
 http://purl.obolibrary.org/obo/apo.owl
-http://purl.obolibrary.org/obo/bto.owl
 http://purl.obolibrary.org/obo/mmusdv.owl
 http://purl.obolibrary.org/obo/po.owl
 http://purl.obolibrary.org/obo/ppo.owl
