@@ -81,7 +81,7 @@ mmusdv-base.owl: mmusdv.owl
 		--output $@
 
 foodon.owl:
-	curl -L -O 'http://purl.obolibrary.org/obo/mmusdv.owl'
+	curl -L -O 'http://purl.obolibrary.org/obo/foodon.owl'
 
 foodon-base.owl: foodon.owl
 	$(ROBOT) merge --input $< \
