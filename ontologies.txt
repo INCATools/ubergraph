@@ -37,4 +37,3 @@ http://purl.obolibrary.org/obo/wbbt/wbbt-base.owl
 http://purl.obolibrary.org/obo/wbls/wbls-base.owl
 http://purl.obolibrary.org/obo/wbphenotype/wbphenotype-base.owl
 http://purl.obolibrary.org/obo/zfa/zfa-base.owl
-https://github.com/EBISPOT/efo/releases/download/current/efo-base.owl
