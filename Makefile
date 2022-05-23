@@ -11,7 +11,7 @@ NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
 
 all: ubergraph.jnl
 
-mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl ubergraph-axioms.ofn
+mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl foodon-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
 	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
 	cp ../pr-base.owl pr-base.owl &&\
@@ -19,6 +19,7 @@ mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-
 	cp ../ppo-base.owl ppo-base.owl &&\
 	cp ../apo-base.owl apo-base.owl &&\
 	cp ../mmusdv-base.owl mmusdv-base.owl &&\
+	cp ../foodon-base.owl foodon-base.owl &&\
 	$(ROBOT) convert -i ../ubergraph-axioms.ofn -o ubergraph-axioms.owl
 
 # Make pseudo-base version for ontologies that don't provide one
@@ -78,6 +79,18 @@ mmusdv-base.owl: mmusdv.owl
 		--preserve-structure false \
 		--trim false \
 		--output $@
+
+foodon.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/mmusdv.owl'
+
+foodon-base.owl: foodon.owl
+	$(ROBOT) merge --input $< \
+		remove \
+			--base-iri 'http://purl.obolibrary.org/obo/FOODON_' \
+			--axioms external \
+			--preserve-structure false \
+			--trim false \
+			--output $@
 
 ontologies-merged.ttl: mirror
 	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
