@@ -1,34 +1,36 @@
 #define RDFS_SUBCLASS_OF "<http://www.w3.org/2000/01/rdf-schema#subClassOf>"
-#define SUBCLASS_COUNT "<http://reasoner.renci.org/vocab/subClassCount>"
+#define PART_OF "<http://purl.obolibrary.org/obo/BFO_0000050>"
+#define REFERENCE_COUNT "<http://reasoner.renci.org/vocab/referenceCount>"
 #define HAS_NORMALIZED_IC "<http://reasoner.renci.org/vocab/normalizedInformationContent>"
 
 .functor logn(x: float): float
 
 .decl rdf(s: symbol, p: symbol, o: symbol)
-.decl subClassOf(sub: symbol, super: symbol)
+.decl references(sub: symbol, super: symbol)
 .decl term(t: symbol)
 .decl totalTerms(c: number)
-.decl subClassCount(term: symbol, c: number)
+.decl referenceCount(term: symbol, c: number)
 .decl maxIC(n: float)
 .decl normalizedIC(term: symbol, ic: float)
 .decl icRDF(term: symbol, predicate: symbol, ic: float, dot: symbol)
 .decl scRDF(term: symbol, predicate: symbol, c: number, dot: symbol)
 
-subClassOf(sub, super) :- rdf(sub, RDFS_SUBCLASS_OF, super).
+references(sub, super) :- rdf(sub, RDFS_SUBCLASS_OF, super).
+references(sub, super) :- rdf(sub, PART_OF, super).
 
-term(t) :- subClassOf(t, _).
+term(t) :- references(t, _).
 
 totalTerms(c) :- c = count : { term(_) }.
 
-subClassCount(t, c) :- term(t), c = count : { subClassOf(_, t) }.
+referenceCount(t, c) :- term(t), c = count : { references(_, t) }.
 
 maxIC(-@logn(1.0/to_float(n))) :- totalTerms(n).
 
-normalizedIC(t, (-@logn(to_float(c)/to_float(total)))*scale) :- subClassCount(t, c), totalTerms(total), maxIC(maxic), scale=100.0/maxic.
+normalizedIC(t, (-@logn(to_float(c)/to_float(total)))*scale) :- referenceCount(t, c), totalTerms(total), maxIC(maxic), scale=100.0/maxic.
 
 icRDF(term, HAS_NORMALIZED_IC, ic, ".") :- normalizedIC(term, ic).
 
-scRDF(term, SUBCLASS_COUNT, c, ".") :- subClassCount(term, c).
+scRDF(term, REFERENCE_COUNT, c, ".") :- referenceCount(term, c).
 
 // sed 's/ /\t/' <ontology.nt | sed 's/ /\t/' | sed 's/ \.$//' >rdf.facts
 .input rdf
