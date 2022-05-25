@@ -26,6 +26,7 @@
   - Plant Ontology (PO)
   - Plant Phenology Ontology (PPO)
   - Drosophila Anatomy Ontology (FBbt)
+  - Food Ontology (FoodOn)
 - Precomputed OWL classification (class hierarchy)
 - Materialized “class relations” from existential property restrictions (in separate named graphs)
 - Blazegraph RDF triplestore; SPARQL query interface
