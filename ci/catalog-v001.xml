@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <uri id="taxslim" name="http://purl.obolibrary.org/obo/ncbitaxon/subsets/taxslim.owl" uri="mirror/taxslim.owl"/>
+    <uri id="taxslim-disjoint-over-in-taxon.owl" name="http://purl.obolibrary.org/obo/ncbitaxon/subsets/taxslim-disjoint-over-in-taxon.owl" uri="mirror/taxslim-disjoint-over-in-taxon.owl"/>
+    <uri id="chebi" name="http://purl.obolibrary.org/obo/chebi.owl" uri="mirror/chebi.owl"/>
+    <uri id="go-base" name="http://purl.obolibrary.org/obo/go/go-base.owl" uri="go-ontology/src/ontology/go-base.owl"/>
+    <uri id="uberon-base" name="http://purl.obolibrary.org/obo/uberon/uberon-base.owl" uri="uberon/src/ontology/uberon-base.owl"/>
+    <uri id="cl-base" name="http://purl.obolibrary.org/obo/cl/cl-base.owl" uri="cell-ontology/src/ontology/cl-base.owl"/>
+    <uri id="ro-base" name="http://purl.obolibrary.org/obo/ro/ro-base.owl" uri="obo-relations/src/ontology/ro-base.owl"/>
+</catalog>

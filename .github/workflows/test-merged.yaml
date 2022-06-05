@@ -1,0 +1,13 @@
+name: Early warning CI
+on:
+  workflow_dispatch:
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    container: obolibrary/odkfull:latest
+    strategy:
+      max-parallel: 1
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test for incoherency
+        run: ./ci/test-merged.sh
