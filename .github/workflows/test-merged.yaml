@@ -1,8 +1,10 @@
 name: Early warning CI
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "@daily"
 jobs:
-  release:
+  test:
     runs-on: ubuntu-latest
     container: obolibrary/odkfull:latest
     strategy:
