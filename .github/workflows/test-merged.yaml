@@ -2,7 +2,7 @@ name: Early warning CI
 on:
   workflow_dispatch:
   schedule:
-    - cron: "@daily"
+    - cron: "0 0 * * *"
 jobs:
   test:
     runs-on: ubuntu-latest
