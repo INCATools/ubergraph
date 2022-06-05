@@ -1,4 +1,4 @@
-name: Early warning CI
+name: Coherency check
 on:
   workflow_dispatch:
   schedule:
