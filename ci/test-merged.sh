@@ -25,6 +25,8 @@ cd $ROOT_DIR
 cd uberon/src/ontology
 mkdir -p tmp
 make uberon-base.owl
+make bridge/uberon-bridge-to-bfo.owl
+make bridge/uberon-bridge-to-caro.owl
 cd $ROOT_DIR
 
 cd cell-ontology/src/ontology

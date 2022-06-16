@@ -15,4 +15,7 @@ Import(<http://purl.obolibrary.org/obo/uberon/uberon-base.owl>)
 Import(<http://purl.obolibrary.org/obo/cl/cl-base.owl>)
 Import(<http://purl.obolibrary.org/obo/ro/ro-base.owl>)
 Import(<http://purl.obolibrary.org/obo/go/extensions/go-bfo-bridge.owl>)
+# This one has an odd IRI:
+Import(<http://purl.obolibrary.org/obo/uberon-bridge-to-bfo.owl>)
+Import(<http://purl.obolibrary.org/obo/uberon/bridge/uberon-bridge-to-caro.owl>)
 )

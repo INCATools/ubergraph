@@ -6,6 +6,8 @@
     <uri id="go-base" name="http://purl.obolibrary.org/obo/go/go-base.owl" uri="go-ontology/src/ontology/go-base.owl"/>
     <uri id="go-bfo-bridge" name="http://purl.obolibrary.org/obo/go/extensions/go-bfo-bridge.owl" uri="go-ontology/src/ontology/extensions/go-bfo-bridge.owl"/>
     <uri id="uberon-base" name="http://purl.obolibrary.org/obo/uberon/uberon-base.owl" uri="uberon/src/ontology/uberon-base.owl"/>
+    <uri id="uberon-bridge-to-bfo" name="http://purl.obolibrary.org/obo/uberon-bridge-to-bfo.owl" uri="uberon/src/ontology/bridge/uberon-bridge-to-bfo.owl"/>
+    <uri id="uberon-bridge-to-caro" name="http://purl.obolibrary.org/obo/uberon/bridge/uberon-bridge-to-caro.owl" uri="uberon/src/ontology/bridge/uberon-bridge-to-caro.owl"/>
     <uri id="cl-base" name="http://purl.obolibrary.org/obo/cl/cl-base.owl" uri="cell-ontology/src/ontology/cl-base.owl"/>
     <uri id="ro-base" name="http://purl.obolibrary.org/obo/ro/ro-base.owl" uri="obo-relations/src/ontology/ro-base.owl"/>
 </catalog>
