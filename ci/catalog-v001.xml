@@ -9,6 +9,7 @@
     <uri id="uberon-bridge-to-bfo" name="http://purl.obolibrary.org/obo/uberon-bridge-to-bfo.owl" uri="uberon/src/ontology/bridge/uberon-bridge-to-bfo.owl"/>
     <uri id="uberon-bridge-to-caro" name="http://purl.obolibrary.org/obo/uberon/bridge/uberon-bridge-to-caro.owl" uri="uberon/src/ontology/bridge/uberon-bridge-to-caro.owl"/>
     <uri id="cl-base" name="http://purl.obolibrary.org/obo/cl/cl-base.owl" uri="cell-ontology/src/ontology/cl-base.owl"/>
+    <uri id="bspo-base" name="http://purl.obolibrary.org/obo/bspo/bspo-base.owl" uri="biological-spatial-ontology/src/ontology/bspo-base.owl"/>
     <uri id="ro-base" name="http://purl.obolibrary.org/obo/ro/ro-base.owl" uri="obo-relations/src/ontology/ro-base.owl"/>
     <uri id="ro-other-import" name="http://purl.obolibrary.org/obo/ro/other_import.owl" uri="obo-relations/src/ontology/other_import.owl"/>
 </catalog>

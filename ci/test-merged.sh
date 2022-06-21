@@ -16,6 +16,7 @@ cd $ROOT_DIR
 git clone --depth 1 'https://github.com/geneontology/go-ontology.git'
 git clone --depth 1 'https://github.com/obophenotype/uberon.git'
 git clone --depth 1 'https://github.com/obophenotype/cell-ontology.git'
+git clone --depth 1 'https://github.com/obophenotype/biological-spatial-ontology.git'
 git clone --depth 1 'https://github.com/oborel/obo-relations.git'
 
 cd go-ontology/src/ontology
@@ -31,6 +32,10 @@ cd $ROOT_DIR
 
 cd cell-ontology/src/ontology
 make cl-base.owl
+cd $ROOT_DIR
+
+cd biological-spatial-ontology/src/ontology
+make bspo-base.owl
 cd $ROOT_DIR
 
 cd obo-relations/src/ontology
