@@ -1,0 +1,22 @@
+#+ summary: Find replaced by term in obsolete term
+#+ description: Enter an obsolete term and return the term replaced by it 
+
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX replaced_by: <http://purl.obolibrary.org/obo/IAO_0100001>
+SELECT ?obsolete_class ?replaced_by
+WHERE {
+  {
+    ?_obsolete_class_iri rdf:type owl:Class; 
+      owl:deprecated "true"^^xsd:boolean; 
+      replaced_by: ?replaced_by .
+  }
+  UNION
+  {
+    ?replaced_by rdf:type owl:Class;
+      oboinowl:hasAlternativeId ?_obsolete_class_iri .
+  }
+  BIND(?_obsolete_class_iri AS ?obsolete_class)
+}
