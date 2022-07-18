@@ -167,8 +167,8 @@ ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl prop
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.nt
 
-ubergraph.nq: ubergraph.jnl
-	$(BG_RUNNER) dump --journal=$< --outformat=n-quads $@
+ubergraph.nq.gz: ubergraph.jnl
+	$(BG_RUNNER) dump --journal=$< --outformat=n-quads ubergraph.nq && gzip ubergraph.nq
 
 kgx/nodes.tsv: ubergraph.jnl build-sparql/kgx-nodes.rq
 	mkdir -p kgx
