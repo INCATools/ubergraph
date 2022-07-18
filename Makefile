@@ -9,7 +9,7 @@ BIOLINK=2.2.4
 
 NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
 
-all: ubergraph.jnl
+all: ubergraph.jnl ubergraph.nq
 
 mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl foodon-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
@@ -166,6 +166,9 @@ ubergraph.jnl: ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl prop
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' information-content.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.nt
+
+ubergraph.nq: ubergraph.jnl
+	$(BG_RUNNER) dump --journal=$< --outformat=n-quads $@
 
 kgx/nodes.tsv: ubergraph.jnl build-sparql/kgx-nodes.rq
 	mkdir -p kgx
