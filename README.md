@@ -61,6 +61,12 @@ The Ubergraph triplestore is organized into several named graphs.
 - `https://biolink.github.io/biolink-model/` — RDF rendering of the [Biolink model](https://github.com/biolink/biolink-model), as well as triples connecting ontology terms to Biolink categories (derived from mappings in Biolink model), using the predicate `https://w3id.org/biolink/vocab/category`.
 - `http://reasoner.renci.org/ontology/closure` — The transitive reflexive subclass closure only, no existential relations. _This graph may be removed, since these triples are all in `http://reasoner.renci.org/redundant`._
 
+## Downloads
+
+You can download files pertaining to the current build. Currently only the Blazegraph database file is available, but more are coming soon (e.g., N-Quads RDF).
+
+- [Blazegraph database file](https://ubergraph.apps.renci.org/downloads/current/ubergraph.jnl.gz)
+
 ## Coherency checks
 
 [![Coherency check](https://github.com/INCATools/ubergraph/actions/workflows/test-merged.yaml/badge.svg)](https://github.com/INCATools/ubergraph/actions/workflows/test-merged.yaml)
