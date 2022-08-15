@@ -10,7 +10,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && apt-get install -y --no-i
 RUN curl -s https://packagecloud.io/install/repositories/souffle-lang/souffle/script.deb.sh | bash && apt-get install -y souffle
 
 ###### blazegraph-runner #####
-ENV BR=1.5
+ENV BR=1.7
 ENV PATH "/tools/blazegraph-runner/bin:$PATH"
 RUN wget -nv https://github.com/balhoff/blazegraph-runner/releases/download/v$BR/blazegraph-runner-$BR.tgz \
 && tar -zxvf blazegraph-runner-$BR.tgz \
