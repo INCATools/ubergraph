@@ -63,8 +63,9 @@ The Ubergraph triplestore is organized into several named graphs.
 
 ## Downloads
 
-You can download files pertaining to the current build. Currently only the Blazegraph database file is available, but more are coming soon (e.g., N-Quads RDF).
+You can download files pertaining to the current build.
 
+- [RDF N-Quads](https://ubergraph.apps.renci.org/downloads/current/ubergraph.nq.gz) (RDF four column format: subject, predicate, object, graph)
 - [Blazegraph database file](https://ubergraph.apps.renci.org/downloads/current/ubergraph.jnl.gz)
 
 ## Coherency checks
