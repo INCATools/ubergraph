@@ -1,0 +1,8 @@
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+CONSTRUCT {
+  <http://reasoner.renci.org/ontology> dcterms:created ?date .
+}
+WHERE {
+  BIND(NOW() as ?date) .
+}
