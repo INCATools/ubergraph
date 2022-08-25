@@ -23,6 +23,13 @@ RUN wget -nv https://github.com/balhoff/relation-graph/releases/download/v$RG/re
 && tar -zxvf relation-graph-cli-$RG.tgz \
 && mv relation-graph-cli-$RG /tools/relation-graph
 
+###### relation-graph #####
+ENV RTT=0.1
+ENV PATH "/tools/rdf-to-table/bin:$PATH"
+RUN wget -nv https://github.com/balhoff/rdf-to-table/releases/download/v$RTT/rdf-to-table-$RTT.tgz \
+&& tar -zxvf rdf-to-table-$RTT.tgz \
+&& mv rdf-to-table-$RTT /tools/rdf-to-table
+
 ###### obographviz #####
 RUN cd /tools \
 && git clone 'https://github.com/cmungall/obographviz.git' \
