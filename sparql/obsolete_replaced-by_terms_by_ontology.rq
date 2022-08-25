@@ -1,5 +1,5 @@
 #+ summary: Find replaced terms by ontology
-#+ description: Choose an ontology and get back list of all obsolete terms with their terms replaced by it
+#+ description: Choose an ontology and get back a list of all obsolete terms with the terms that replace them
 #+ pagination: 100
 #+ enumerate:
 #+   - ontology:
@@ -35,7 +35,9 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX replaced_by: <http://purl.obolibrary.org/obo/IAO_0100001>
-SELECT ?obsolete_class ?replaced_by
+PREFIX oboinowl: <http://www.geneontology.org/formats/oboInOwl#>
+
+SELECT ?obsolete_class ?replaced_by_iri
 WHERE {
   {
     ?obsolete_class rdf:type owl:Class; 
@@ -49,5 +51,5 @@ WHERE {
       oboinowl:hasAlternativeId ?obsolete_class .
     ?obsolete_class rdfs:isDefinedBy ?_ontology_iri .
   }
-  FILTER(isIRI(?replaced_by))
+  BIND (IF(isLiteral(?replaced_by), IRI(CONCAT("http://purl.obolibrary.org/obo/", STRBEFORE(?replaced_by_iri, ":"), "_", STRAFTER(?replaced_by_iri, ":"))), ?replaced_by) AS ?replaced_by_iri)
 }
