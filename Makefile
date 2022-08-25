@@ -170,13 +170,15 @@ ubergraph.jnl: build-metadata.nt ontologies-merged.ttl subclass_closure.ttl is_d
 ubergraph.nq.gz: ubergraph.jnl
 	$(BG_RUNNER) dump --journal=$< --outformat=n-quads ubergraph.nq && gzip ubergraph.nq
 
-redundant-graph-table.tgz: properties-redundant.nt
+redundant-graph-table.tgz: properties-redundant.nt build-metadata.nt
 	mkdir -p redundant-graph-table &&\
+	cp build-metadata.nt redundant-graph-table/build-metadata.nt &&\
 	rdf-to-table --input-file $< --edges-file redundant-graph-table/edges.tsv --nodes-file redundant-graph-table/node-labels.tsv --predicates-file redundant-graph-table/edge-labels.tsv &&\
 	tar -zcf $@ redundant-graph-table
 
-nonredundant-graph-table.tgz: properties-nonredundant.nt
+nonredundant-graph-table.tgz: properties-nonredundant.nt build-metadata.nt
 	mkdir -p nonredundant-graph-table &&\
+	cp build-metadata.nt nonredundant-graph-table/build-metadata.nt &&\
 	rdf-to-table --input-file $< --edges-file nonredundant-graph-table/edges.tsv --nodes-file nonredundant-graph-table/node-labels.tsv --predicates-file nonredundant-graph-table/edge-labels.tsv &&\
 	tar -zcf $@ nonredundant-graph-table
 
