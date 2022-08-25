@@ -67,7 +67,14 @@ You can download files pertaining to the current build.
 
 - [RDF N-Quads](https://ubergraph.apps.renci.org/downloads/current/ubergraph.nq.gz) (RDF four column format: subject, predicate, object, graph)
 - [Blazegraph database file](https://ubergraph.apps.renci.org/downloads/current/ubergraph.jnl.gz)
-
+- Redundant and nonredundant graphs as integer-based edge tables for graph analysis or machine-learning. Archives contain these files:
+  - `edges.tsv`: tab-separated subject, predicate, object integer IDs
+  - `node-labels.tsv`: tab-separated node ID, node IRI (nodes are subjects and objects in the edges table)
+  - `edge-labels.tsv`: tab-separated relation ID, relation IRI
+  - `build-metadata.nt`: RDF describing Ubergraph build date
+  - Available graphs:
+    - [nonredundant-graph-table.tgz](https://ubergraph.apps.renci.org/downloads/current/nonredundant-graph-table.tgz)
+    - [redundant-graph-table.tgz](https://ubergraph.apps.renci.org/downloads/current/redundant-graph-table.tgz)
 ## Coherency checks
 
 [![Coherency check](https://github.com/INCATools/ubergraph/actions/workflows/test-merged.yaml/badge.svg)](https://github.com/INCATools/ubergraph/actions/workflows/test-merged.yaml)
