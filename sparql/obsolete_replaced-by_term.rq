@@ -18,7 +18,8 @@ WHERE {
   {
     ?replaced_by rdf:type owl:Class;
       oboinowl:hasAlternativeId ?_obsolete_class_iri .
+    FILTER(isIRI(?replaced_by))
   }
   BIND(?_obsolete_class_iri AS ?obsolete_class)
-  BIND (IF(isLiteral(?replaced_by), IRI(CONCAT("http://purl.obolibrary.org/obo/", STRBEFORE(?replaced_by_iri, ":"), "_", STRAFTER(?replaced_by_iri, ":"))), ?replaced_by) AS ?replaced_by_iri)
+  BIND (IF(isLiteral(?replaced_by), IRI(CONCAT("http://purl.obolibrary.org/obo/", STRBEFORE(?replaced_by, ":"), "_", STRAFTER(?replaced_by, ":"))), ?replaced_by) AS ?replaced_by_iri)
 }
