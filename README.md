@@ -37,7 +37,7 @@
 ### SPARQL endpoint
 
 - Service: `https://ubergraph.apps.renci.org/sparql`
-- Query interface in YASGUI: https://api.triplydb.com/s/e5aK9EOKg
+- Query interface in YASGUI (this query retrieves the current build date): https://api.triplydb.com/s/oQgG4f0gs
 
 ### grlc API
 
