@@ -1,0 +1,56 @@
+#+ summary: Find replaced terms by ontology
+#+ description: Choose an ontology and get back a list of all obsolete terms with the terms that replace them
+#+ pagination: 100
+#+ enumerate:
+#+   - ontology:
+#+    - <http://purl.obolibrary.org/obo/bspo.owl>
+#+    - <http://purl.obolibrary.org/obo/chebi.owl>
+#+    - <http://purl.obolibrary.org/obo/caro.owl>
+#+    - <http://purl.obolibrary.org/obo/iao.owl>
+#+    - <http://purl.obolibrary.org/obo/ro.owl>
+#+    - <http://purl.obolibrary.org/obo/emapa.owl>
+#+    - <http://purl.obolibrary.org/obo/bfo.owl>
+#+    - <http://purl.obolibrary.org/obo/ma.owl>
+#+    - <http://purl.obolibrary.org/obo/mi.owl>
+#+    - <http://purl.obolibrary.org/obo/mmo.owl>
+#+    - <http://purl.obolibrary.org/obo/envo.owl>
+#+    - <http://purl.obolibrary.org/obo/go.owl>
+#+    - <http://purl.obolibrary.org/obo/hp.owl>
+#+    - <http://purl.obolibrary.org/obo/ncbitaxon.owl>
+#+    - <http://purl.obolibrary.org/obo/mf.owl>
+#+    - <http://purl.obolibrary.org/obo/ncit.owl>
+#+    - <http://purl.obolibrary.org/obo/uberon.owl>
+#+    - <http://purl.obolibrary.org/obo/so.owl>
+#+    - <http://purl.obolibrary.org/obo/cl.owl>
+#+    - <http://purl.obolibrary.org/obo/fbbt.owl>
+#+    - <http://purl.obolibrary.org/obo/mp.owl>
+#+    - <http://purl.obolibrary.org/obo/bto.owl>
+#+    - <http://purl.obolibrary.org/obo/wbbt.owl>
+#+    - <http://purl.obolibrary.org/obo/zfa.owl>
+#+    - <http://purl.obolibrary.org/obo/xao.owl>
+#+    - <http://purl.obolibrary.org/obo/pr.owl>
+
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX replaced_by: <http://purl.obolibrary.org/obo/IAO_0100001>
+PREFIX oboinowl: <http://www.geneontology.org/formats/oboInOwl#>
+
+SELECT ?obsolete_class ?replaced_by_iri
+WHERE {
+  {
+    ?obsolete_class rdf:type owl:Class; 
+      owl:deprecated "true"^^xsd:boolean; 
+      replaced_by: ?replaced_by; 
+      rdfs:isDefinedBy ?_ontology_iri .
+  }
+  UNION
+  {
+    ?replaced_by rdf:type owl:Class;
+      oboinowl:hasAlternativeId ?obsolete_class .
+    ?obsolete_class rdfs:isDefinedBy ?_ontology_iri .
+    FILTER(isIRI(?replaced_by))
+  }
+  BIND (IF(isLiteral(?replaced_by), IRI(CONCAT("http://purl.obolibrary.org/obo/", STRBEFORE(?replaced_by, ":"), "_", STRAFTER(?replaced_by, ":"))), ?replaced_by) AS ?replaced_by_iri)
+}
