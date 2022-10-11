@@ -125,6 +125,9 @@ ontologies-merged.ttl: mirror
 	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
 	reason -r ELK -D debug.ofn -o $@
 
+explanation.md: mirror
+	$(ROBOT) explain $(addprefix -i mirror/,$(shell ls mirror)) -M unsatisfiability --unsatisfiable random:2 --explanation explanation.md
+
 subclass_closure.ttl: ontologies-merged.ttl subclass_closure.rq
 	$(ARQ) -q --data=$< --query=subclass_closure.rq --results=ttl --optimize=off >$@
 
