@@ -27,6 +27,7 @@ http://purl.obolibrary.org/obo/ncit.owl
 http://purl.obolibrary.org/obo/obi/obi-base.owl
 http://purl.obolibrary.org/obo/pato/pato-base.owl
 http://purl.obolibrary.org/obo/pcl/pcl-base.owl
+http://purl.obolibrary.org/obo/pco/pco-base.owl
 http://purl.obolibrary.org/obo/ro/ro-base.owl
 http://purl.obolibrary.org/obo/so.owl
 http://purl.obolibrary.org/obo/uberon/bridge/cl-bridge-to-caro.owl
