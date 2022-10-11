@@ -9,6 +9,7 @@ mkdir mirror
 curl -L -o 'mirror/taxslim.owl' 'http://purl.obolibrary.org/obo/ncbitaxon/subsets/taxslim.owl'
 curl -L -o 'mirror/taxslim-disjoint-over-in-taxon.owl' 'http://purl.obolibrary.org/obo/ncbitaxon/subsets/taxslim-disjoint-over-in-taxon.owl'
 curl -L -o 'mirror/chebi.owl.gz' 'http://purl.obolibrary.org/obo/chebi.owl.gz'
+curl -L -o 'mirror/iao.owl' 'http://purl.obolibrary.org/obo/iao.owl'
 cd mirror
 gunzip chebi.owl.gz
 cd $ROOT_DIR

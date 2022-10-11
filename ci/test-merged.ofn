@@ -20,4 +20,5 @@ Import(<http://purl.obolibrary.org/obo/go/extensions/go-bfo-bridge.owl>)
 # This one has an odd IRI:
 Import(<http://purl.obolibrary.org/obo/uberon-bridge-to-bfo.owl>)
 Import(<http://purl.obolibrary.org/obo/uberon/bridge/uberon-bridge-to-caro.owl>)
+Import(<http://purl.obolibrary.org/obo/iao.owl>)
 )
