@@ -11,7 +11,7 @@ NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
 
 all: ubergraph.jnl ubergraph.nq.gz redundant-graph-table.tgz nonredundant-graph-table.tgz
 
-mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl foodon-base.owl ubergraph-axioms.ofn
+mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl foodon-base.owl to-base.owl peco-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
 	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
 	cp ../pr-base.owl pr-base.owl &&\
@@ -20,6 +20,8 @@ mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-
 	cp ../apo-base.owl apo-base.owl &&\
 	cp ../mmusdv-base.owl mmusdv-base.owl &&\
 	cp ../foodon-base.owl foodon-base.owl &&\
+	cp ../to-base.owl to-base.owl &&\
+	cp ../peco-base.owl peco-base.owl &&\
 	$(ROBOT) convert -i ../ubergraph-axioms.ofn -o ubergraph-axioms.owl
 
 build-metadata.nt: build-sparql/build-metadata.rq
@@ -90,6 +92,30 @@ foodon-base.owl: foodon.owl
 	$(ROBOT) merge --input $< \
 		remove \
 			--base-iri 'http://purl.obolibrary.org/obo/FOODON_' \
+			--axioms external \
+			--preserve-structure false \
+			--trim false \
+			--output $@
+
+to.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/to.owl'
+
+to-base.owl: to.owl
+	$(ROBOT) merge --input $< \
+		remove \
+			--base-iri 'http://purl.obolibrary.org/obo/TO_' \
+			--axioms external \
+			--preserve-structure false \
+			--trim false \
+			--output $@
+
+peco.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/peco.owl'
+
+peco-base.owl: peco.owl
+	$(ROBOT) merge --input $< \
+		remove \
+			--base-iri 'http://purl.obolibrary.org/obo/PECO_' \
 			--axioms external \
 			--preserve-structure false \
 			--trim false \
