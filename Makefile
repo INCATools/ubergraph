@@ -123,8 +123,6 @@ peco-base.owl: peco.owl
 
 ontologies-merged.ttl: mirror
 	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
-	remove --axioms 'disjoint' --trim true --preserve-structure false \
-	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
 
 subclass_closure.ttl: ontologies-merged.ttl subclass_closure.rq
