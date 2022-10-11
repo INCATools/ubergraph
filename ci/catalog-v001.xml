@@ -3,6 +3,7 @@
     <uri id="taxslim" name="http://purl.obolibrary.org/obo/ncbitaxon/subsets/taxslim.owl" uri="mirror/taxslim.owl"/>
     <uri id="taxslim-disjoint-over-in-taxon.owl" name="http://purl.obolibrary.org/obo/ncbitaxon/subsets/taxslim-disjoint-over-in-taxon.owl" uri="mirror/taxslim-disjoint-over-in-taxon.owl"/>
     <uri id="chebi" name="http://purl.obolibrary.org/obo/chebi.owl" uri="mirror/chebi.owl"/>
+    <uri id="chebi" name="http://purl.obolibrary.org/obo/iao.owl" uri="mirror/iao.owl"/>
     <uri id="go-base" name="http://purl.obolibrary.org/obo/go/go-base.owl" uri="go-ontology/src/ontology/go-base.owl"/>
     <uri id="go-bfo-bridge" name="http://purl.obolibrary.org/obo/go/extensions/go-bfo-bridge.owl" uri="go-ontology/src/ontology/extensions/go-bfo-bridge.owl"/>
     <uri id="uberon-base" name="http://purl.obolibrary.org/obo/uberon/uberon-base.owl" uri="uberon/src/ontology/uberon-base.owl"/>
