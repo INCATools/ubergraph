@@ -15,6 +15,7 @@ http://purl.obolibrary.org/obo/fypo/fypo-base.owl
 http://purl.obolibrary.org/obo/go/extensions/go-bfo-bridge.owl
 http://purl.obolibrary.org/obo/go/go-base.owl
 http://purl.obolibrary.org/obo/hp/hp-base.owl
+http://purl.obolibrary.org/obo/iao.owl
 http://purl.obolibrary.org/obo/ma.owl
 http://purl.obolibrary.org/obo/maxo/maxo-base.owl
 http://purl.obolibrary.org/obo/mi.owl
