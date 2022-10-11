@@ -19,6 +19,7 @@ git clone --depth 1 'https://github.com/obophenotype/uberon.git'
 git clone --depth 1 'https://github.com/obophenotype/cell-ontology.git'
 git clone --depth 1 'https://github.com/obophenotype/biological-spatial-ontology.git'
 git clone --depth 1 'https://github.com/oborel/obo-relations.git'
+git clone --depth 1 'https://github.com/obi-ontology/obi.git'
 
 cd go-ontology/src/ontology
 make go-base.owl
@@ -42,6 +43,10 @@ cd $ROOT_DIR
 cd obo-relations/src/ontology
 make ro-base.owl
 make other_import.owl
+cd $ROOT_DIR
+
+cd obi
+make views/obi-base.owl
 cd $ROOT_DIR
 
 robot --catalog catalog-v001.xml \
