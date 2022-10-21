@@ -25,12 +25,24 @@
   - NCIt OBO Edition (NCIT)
   - Plant Ontology (PO)
   - Plant Phenology Ontology (PPO)
+  - Plant Trait Ontology (TO)
+  - Plant Experimental Conditions Ontology (PECO)
   - Drosophila Anatomy Ontology (FBbt)
   - Food Ontology (FoodOn)
+  - Population and Community Ontology (PCO)
+  - Information Artifact Ontology (IAO)
+  - Measurement Method Ontology (MMO)
+  - Molecular Interactions Controlled Vocabulary (MI)
+  - Sequence Ontology (SO)
+  - C. elegans Gross Anatomy Ontology (WBbt)
+  - C. elegans development ontology (WBls)
+  - C. elegans phenotype (WBPhenotype)
+  - Zebrafish anatomy and development ontology (ZFA)
+  - Ascomycete phenotype ontology (APO)
+  - Mouse Developmental Stages (MmusDV)
 - Precomputed OWL classification (class hierarchy)
 - Materialized “class relations” from existential property restrictions (in separate named graphs)
 - Blazegraph RDF triplestore; SPARQL query interface
-
 
 ## Query
 
