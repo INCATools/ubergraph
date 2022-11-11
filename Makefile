@@ -127,9 +127,6 @@ ontologies-merged.ttl: mirror
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
 
-subclass_closure.ttl: ontologies-merged.ttl subclass_closure.rq
-	$(ARQ) -q --data=$< --query=subclass_closure.rq --results=ttl --optimize=off >$@
-
 is_defined_by.ttl: ontologies-merged.ttl isDefinedBy.rq
 	$(ARQ) -q --data=$< --query=isDefinedBy.rq --results=ttl >$@
 
@@ -177,7 +174,7 @@ biolink-model.ttl:
 	sed -E 's/<https:\/\/w3id.org\/biolink\/vocab\/([^[:space:]][^[:space:]]*):/<http:\/\/purl.obolibrary.org\/obo\/\1_/g' |\
 	riot --syntax=ntriples --output=turtle >$@
 
-ubergraph.jnl: build-metadata.nt ontologies-merged.ttl subclass_closure.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl build-sparql/biolink-categories.ru information-content.ttl
+ubergraph.jnl: build-metadata.nt ontologies-merged.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl build-sparql/biolink-categories.ru information-content.ttl
 	rm -f $@ &&\
 	$(BG_RUNNER) load --journal=$@ --informat=rdfxml --use-ontology-graph=true mirror &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' build-metadata.nt &&\
@@ -187,7 +184,6 @@ ubergraph.jnl: build-metadata.nt ontologies-merged.ttl subclass_closure.ttl is_d
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' lexically-derived-opposites-inverse.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='https://biolink.github.io/biolink-model/' biolink-model.ttl &&\
 	$(BG_RUNNER) update --journal=$@ build-sparql/biolink-categories.ru
-	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology/closure' subclass_closure.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' is_defined_by.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' information-content.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.nt &&\
