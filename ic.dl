@@ -1,5 +1,3 @@
-#define RDFS_SUBCLASS_OF "<http://www.w3.org/2000/01/rdf-schema#subClassOf>"
-#define PART_OF "<http://purl.obolibrary.org/obo/BFO_0000050>"
 #define REFERENCE_COUNT "<http://reasoner.renci.org/vocab/referenceCount>"
 #define HAS_NORMALIZED_IC "<http://reasoner.renci.org/vocab/normalizedInformationContent>"
 
@@ -15,8 +13,7 @@
 .decl icRDF(term: symbol, predicate: symbol, ic: float, dot: symbol)
 .decl scRDF(term: symbol, predicate: symbol, c: number, dot: symbol)
 
-references(sub, super) :- rdf(sub, RDFS_SUBCLASS_OF, super).
-references(sub, super) :- rdf(sub, PART_OF, super).
+references(sub, super) :- rdf(sub, _, super).
 
 term(t) :- references(t, _).
 
