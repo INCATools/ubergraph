@@ -9,6 +9,7 @@
   - Gene Ontology (GO)
   - Biospatial Ontology (BSPO)
   - Phenotype and Trait Ontology (PATO)
+  - Ontology of Biological Attributes (OBA)
   - Human Phenotype Ontology (HPO)
   - Mammalian Phenotype Ontology (MP)
   - Fission Yeast Phenotype Ontology (FYPO)
