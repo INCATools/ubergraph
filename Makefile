@@ -30,10 +30,10 @@ build-metadata.nt: build-sparql/build-metadata.rq
 # Make pseudo-base version for ontologies that don't provide one
 # TODO add these all to a separate file instead of repeating code
 
-pro_nonreasoned.obo:
-	curl -L -O 'https://proconsortium.org/download/current/pro_nonreasoned.obo'
+pro_nonreasoned.owl.gz:
+	curl -L -O 'https://proconsortium.org/download/current/pro_nonreasoned.owl.gz'
 
-pr-base.owl: pro_nonreasoned.obo
+pr-base.owl: pro_nonreasoned.owl.gz
 	$(ROBOT) remove --input $< \
 		--base-iri 'http://purl.obolibrary.org/obo/PR_' \
 		--axioms external \
