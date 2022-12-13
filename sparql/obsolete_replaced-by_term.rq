@@ -10,16 +10,16 @@ PREFIX oboinowl: <http://www.geneontology.org/formats/oboInOwl#>
 SELECT ?obsolete_class ?replaced_by_iri
 WHERE {
   {
-    ?_obsolete_class_iri rdf:type owl:Class; 
+    ?_obsolete_iri rdf:type owl:Class; 
       owl:deprecated "true"^^xsd:boolean; 
       replaced_by: ?replaced_by .
   }
   UNION
   {
     ?replaced_by rdf:type owl:Class;
-      oboinowl:hasAlternativeId ?_obsolete_class_iri .
+      oboinowl:hasAlternativeId ?_obsolete_iri .
     FILTER(isIRI(?replaced_by))
   }
-  BIND(?_obsolete_class_iri AS ?obsolete_class)
+  BIND(?_obsolete_iri AS ?obsolete_class)
   BIND (IF(isLiteral(?replaced_by), IRI(CONCAT("http://purl.obolibrary.org/obo/", STRBEFORE(?replaced_by, ":"), "_", STRAFTER(?replaced_by, ":"))), ?replaced_by) AS ?replaced_by_iri)
 }
