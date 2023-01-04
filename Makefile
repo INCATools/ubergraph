@@ -11,7 +11,7 @@ NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
 
 all: ubergraph.jnl.gz ubergraph.nq.gz redundant-graph-table.tgz nonredundant-graph-table.tgz ontologies-merged.ofn.gz
 
-mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl foodon-base.owl to-base.owl peco-base.owl mro-base.owl ubergraph-axioms.ofn
+mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl foodon-base.owl to-base.owl peco-base.owl mro-base.owl hao-base.owl clao-base.owl oarcs-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
 	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
 	cp ../pr-base.owl pr-base.owl &&\
@@ -23,6 +23,9 @@ mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-
 	cp ../to-base.owl to-base.owl &&\
 	cp ../peco-base.owl peco-base.owl &&\
 	cp ../mro-base.owl mro-base.owl &&\
+	cp ../hao-base.owl hao-base.owl &&\
+	cp ../clao-base.owl clao-base.owl &&\
+	cp ../oarcs-base.owl oarcs-base.owl &&\
 	$(ROBOT) convert -i ../ubergraph-axioms.ofn -o ubergraph-axioms.owl
 
 build-metadata.nt: build-sparql/build-metadata.rq
@@ -129,6 +132,43 @@ mro-base.owl: mro.owl
 	$(ROBOT) merge --input $< \
 		remove \
 			--base-iri 'http://purl.obolibrary.org/obo/MRO_' \
+			--axioms external \
+			--preserve-structure false \
+			--trim false \
+			--output $@
+
+hao.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/hao.owl'
+
+hao-base.owl: hao.owl
+	$(ROBOT) merge --input $< \
+		remove \
+			--base-iri 'http://purl.obolibrary.org/obo/HAO_' \
+			--axioms external \
+			--preserve-structure false \
+			--trim false \
+			--output $@
+
+clao.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/clao.owl'
+
+# CLAO provides a base download, but it includes RO axioms
+clao-base.owl: clao.owl
+	$(ROBOT) merge --input $< \
+		remove \
+			--base-iri 'http://purl.obolibrary.org/obo/CLAO_' \
+			--axioms external \
+			--preserve-structure false \
+			--trim false \
+			--output $@
+
+oarcs.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/oarcs.owl'
+
+oarcs-base.owl: oarcs.owl
+	$(ROBOT) merge --input $< \
+		remove \
+			--base-iri 'http://purl.obolibrary.org/obo/OARCS_' \
 			--axioms external \
 			--preserve-structure false \
 			--trim false \
