@@ -9,7 +9,7 @@ BIOLINK=3.0.0
 
 NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
 
-all: ubergraph.jnl ubergraph.nq.gz redundant-graph-table.tgz nonredundant-graph-table.tgz
+all: ubergraph.jnl.gz ubergraph.nq.gz redundant-graph-table.tgz nonredundant-graph-table.tgz ontologies-merged.ofn.gz
 
 mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl foodon-base.owl to-base.owl peco-base.owl mro-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
@@ -140,6 +140,9 @@ ontologies-merged.ttl: mirror
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	reason -r ELK -D debug.ofn -o $@
 
+ontologies-merged.ofn.gz: ontologies-merged.ttl
+	$(ROBOT) convert -i $< -o ontologies-merged.ofn && gzip ontologies-merged.ofn
+
 is_defined_by.ttl: ontologies-merged.ttl isDefinedBy.rq
 	$(ARQ) -q --data=$< --query=isDefinedBy.rq --results=ttl >$@
 
@@ -205,6 +208,9 @@ ubergraph.jnl: build-metadata.nt ontologies-merged.ttl is_defined_by.ttl propert
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/ontology' information-content.ttl &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/nonredundant' properties-nonredundant.nt &&\
 	$(BG_RUNNER) load --journal=$@ --informat=turtle --graph='http://reasoner.renci.org/redundant' properties-redundant.nt
+
+ubergraph.jnl.gz: ubergraph.jnl
+	gzip --keep $<
 
 ubergraph.nq.gz: ubergraph.jnl
 	$(BG_RUNNER) dump --journal=$< --outformat=n-quads ubergraph.nq && gzip ubergraph.nq
