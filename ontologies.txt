@@ -1,8 +1,10 @@
+http://purl.obolibrary.org/obo/aism/aism-base.owl
 http://purl.obolibrary.org/obo/bspo.owl
 http://purl.obolibrary.org/obo/chebi.owl
 http://purl.obolibrary.org/obo/cl/cl-base.owl
 http://purl.obolibrary.org/obo/cob/cob-base.owl
 http://purl.obolibrary.org/obo/cob/cob-to-external.owl
+http://purl.obolibrary.org/obo/colao/colao-base.owl
 http://purl.obolibrary.org/obo/dpo/dpo-base.owl
 http://purl.obolibrary.org/obo/eco/eco-base.owl
 http://purl.obolibrary.org/obo/ecto/ecto-base.owl
@@ -16,6 +18,7 @@ http://purl.obolibrary.org/obo/go/extensions/go-bfo-bridge.owl
 http://purl.obolibrary.org/obo/go/go-base.owl
 http://purl.obolibrary.org/obo/hp/hp-base.owl
 http://purl.obolibrary.org/obo/iao.owl
+http://purl.obolibrary.org/obo/lepao/lepao-base.owl
 http://purl.obolibrary.org/obo/ma.owl
 http://purl.obolibrary.org/obo/maxo/maxo-base.owl
 http://purl.obolibrary.org/obo/mi.owl
