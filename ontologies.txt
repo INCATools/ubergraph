@@ -25,6 +25,7 @@ http://purl.obolibrary.org/obo/mi.owl
 http://purl.obolibrary.org/obo/mmo.owl
 http://purl.obolibrary.org/obo/mondo/mondo-base.owl
 http://purl.obolibrary.org/obo/mp/mp-base.owl
+http://purl.obolibrary.org/obo/nbo/nbo-base.owl
 http://purl.obolibrary.org/obo/ncbitaxon.owl
 http://purl.obolibrary.org/obo/ncit.owl
 http://purl.obolibrary.org/obo/oba/oba-base.owl
