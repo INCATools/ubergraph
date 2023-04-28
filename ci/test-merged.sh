@@ -42,7 +42,6 @@ cd $ROOT_DIR
 
 cd obo-relations/src/ontology
 make ro-base.owl
-make other_import.owl
 cd $ROOT_DIR
 
 cd obi
