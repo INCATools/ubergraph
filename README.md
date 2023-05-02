@@ -1,5 +1,7 @@
 # Ubergraph [![image](https://user-images.githubusercontent.com/112839/112872474-563aac00-90b8-11eb-8a53-2ca19672f2a4.png)](https://doi.org/10.5281/zenodo.4641309)
 
+Ubergraph paper presented at ICBO 2022: https://doi.org/10.5281/zenodo.7249759
+
 ## Integrated OBO ontology triplestore
 
 - Merged set of mutually referential [OBO](https://obofoundry.org) ontologies:
