@@ -74,7 +74,6 @@ The Ubergraph triplestore is organized into several named graphs.
    - [circulating cell](http://purl.obolibrary.org/obo/CL_0000080) SubClassOf ([part of](http://purl.obolibrary.org/obo/BFO_0000050) some [haemolymphatic fluid](http://purl.obolibrary.org/obo/UBERON_0000179))
 - `http://reasoner.renci.org/nonredundant` — Triples in this graph are a subset of, and have the same semantics as, the "redundant" graph, pruned according to several [redundancy rules](https://github.com/INCATools/ubergraph/blob/ef402ead9ec4e81d9cd998c833123ef48134bb2c/prune.dl#L29-L33).
 - `https://biolink.github.io/biolink-model/` — RDF rendering of the [Biolink model](https://github.com/biolink/biolink-model), as well as triples connecting ontology terms to Biolink categories (derived from mappings in Biolink model), using the predicate `https://w3id.org/biolink/vocab/category`.
-- `http://reasoner.renci.org/ontology/closure` — The transitive reflexive subclass closure only, no existential relations. _This graph may be removed, since these triples are all in `http://reasoner.renci.org/redundant`._
 
 ## Downloads
 
