@@ -279,7 +279,7 @@ kgx/edges.tsv: kgx/nodes.tsv
 #### Commands for building the Docker image ####
 ################################################
 
-VERSION = "1.5"
+VERSION = "1.6"
 IM=monarchinitiative/ubergraph
 
 docker-build-no-cache:
@@ -309,3 +309,6 @@ docker-publish-dev-no-build:
 docker-publish: docker-build
 	@docker push $(IM):$(VERSION) \
 	&& docker push $(IM):latest
+
+docker-all:
+	docker buildx build --platform linux/amd64,linux/arm64 --no-cache --push -t $(IM):$(VERSION) .
