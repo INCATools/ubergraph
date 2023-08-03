@@ -9,6 +9,12 @@ FROM obolibrary/odkfull:v1.4.1
 ###### Souffle ######
 #RUN curl -s https://packagecloud.io/install/repositories/souffle-lang/souffle/script.deb.sh | bash && apt-get install -y souffle
 
+###### oxigraph ######
+ENV OXIGRAPH=0.3.18
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then ARCHITECTURE=x86_64; elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCHITECTURE=aarch64; else ARCHITECTURE=x86_64; fi \
+&& wget -nv https://github.com/oxigraph/oxigraph/releases/download/v$OXIGRAPH/oxigraph_server_v${OXIGRAPH}_${ARCHITECTURE}_linux_gnu \
+&& mv oxigraph_server_v${OXIGRAPH}_${ARCHITECTURE}_linux_gnu /tools/oxigraph_server
+
 ###### blazegraph-runner #####
 ENV BR=1.7
 ENV PATH "/tools/blazegraph-runner/bin:$PATH"
