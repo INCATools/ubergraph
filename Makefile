@@ -267,6 +267,13 @@ nonredundant-graph-table.tgz: properties-nonredundant.nt build-metadata.nt
 	rdf-to-table --input-file $< --edges-file nonredundant-graph-table/edges.tsv --nodes-file nonredundant-graph-table/node-labels.tsv --predicates-file nonredundant-graph-table/edge-labels.tsv &&\
 	tar -zcf $@ nonredundant-graph-table
 
+ubergraph-tdb.tgz: ubergraph.nq.gz
+	rm -rf ubergraph-tdb && mkdir ubergraph-tdb &&\
+	tdb2.tdbloader --loc ubergraph-tdb $< &&\
+	tdb2.tdbstats --loc ubergraph-tdb --graph urn:x-arq:UnionGraph >stats.opt &&\
+	mv stats.opt ubergraph-tdb/Data-0001/stats.opt &&\
+	tar -zcf $@ ubergraph-tdb
+
 kgx/nodes.tsv: ubergraph.jnl build-sparql/kgx-nodes.rq
 	mkdir -p kgx
 	$(BG_RUNNER) select --journal=$< --outformat=tsv build-sparql/kgx-nodes.rq kgx/nodes.tsv
