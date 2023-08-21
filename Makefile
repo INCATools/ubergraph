@@ -43,6 +43,8 @@ pr-base.owl: pro_nonreasoned.owl.gz
 		--axioms external \
 		--preserve-structure false \
 		--trim false \
+		remove --select imports \
+		--trim false \
 		--output $@
 
 ppo.owl:
@@ -53,6 +55,8 @@ ppo-base.owl: ppo.owl
 		--base-iri 'http://purl.obolibrary.org/obo/PPO_' \
 		--axioms external \
 		--preserve-structure false \
+		--trim false \
+		remove --select imports \
 		--trim false \
 		--output $@
 
@@ -65,6 +69,8 @@ po-base.owl: po.owl
 		--axioms external \
 		--preserve-structure false \
 		--trim false \
+		remove --select imports \
+		--trim false \
 		--output $@
 
 apo.owl:
@@ -76,6 +82,8 @@ apo-base.owl: apo.owl
 		--axioms external \
 		--preserve-structure false \
 		--trim false \
+		remove --select imports \
+		--trim false \
 		--output $@
 
 mmusdv.owl:
@@ -86,6 +94,8 @@ mmusdv-base.owl: mmusdv.owl
 		--base-iri 'http://purl.obolibrary.org/obo/MmusDv_' \
 		--axioms external \
 		--preserve-structure false \
+		--trim false \
+		remove --select imports \
 		--trim false \
 		--output $@
 
@@ -99,6 +109,8 @@ foodon-base.owl: foodon.owl
 			--axioms external \
 			--preserve-structure false \
 			--trim false \
+			remove --select imports \
+			--trim false \
 			--output $@
 
 to.owl:
@@ -110,6 +122,8 @@ to-base.owl: to.owl
 			--base-iri 'http://purl.obolibrary.org/obo/TO_' \
 			--axioms external \
 			--preserve-structure false \
+			--trim false \
+			remove --select imports \
 			--trim false \
 			--output $@
 
@@ -123,6 +137,8 @@ peco-base.owl: peco.owl
 			--axioms external \
 			--preserve-structure false \
 			--trim false \
+			remove --select imports \
+			--trim false \
 			--output $@
 
 mro.owl:
@@ -135,6 +151,8 @@ mro-base.owl: mro.owl
 			--axioms external \
 			--preserve-structure false \
 			--trim false \
+			remove --select imports \
+			--trim false \
 			--output $@
 
 hao.owl:
@@ -146,6 +164,8 @@ hao-base.owl: hao.owl
 			--base-iri 'http://purl.obolibrary.org/obo/HAO_' \
 			--axioms external \
 			--preserve-structure false \
+			--trim false \
+			remove --select imports \
 			--trim false \
 			--output $@
 
@@ -160,6 +180,8 @@ clao-base.owl: clao.owl
 			--axioms external \
 			--preserve-structure false \
 			--trim false \
+			remove --select imports \
+			--trim false \
 			--output $@
 
 oarcs.owl:
@@ -171,6 +193,8 @@ oarcs-base.owl: oarcs.owl
 			--base-iri 'http://purl.obolibrary.org/obo/OARCS_' \
 			--axioms external \
 			--preserve-structure false \
+			--trim false \
+			remove --select imports \
 			--trim false \
 			--output $@
 
