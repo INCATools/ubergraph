@@ -9,7 +9,7 @@ BIOLINK=3.0.0
 
 NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
 
-all: ubergraph.jnl.gz ubergraph.nq.gz redundant-graph-table.tgz nonredundant-graph-table.tgz ontologies-merged.ofn.gz ubergraph-oxigraph.tgz
+all: ubergraph.jnl.gz ubergraph.nq.gz redundant-graph-table.tgz nonredundant-graph-table.tgz ontologies-merged.ofn.gz #ubergraph-oxigraph.tgz
 
 mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl foodon-base.owl to-base.owl peco-base.owl mro-base.owl hao-base.owl clao-base.owl oarcs-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
