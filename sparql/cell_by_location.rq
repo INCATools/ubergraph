@@ -1,8 +1,9 @@
-#+ summary: Find cells by location
-#+ description: Enter an anatomical location, get back a list of cell type IRIs and labels
+#+ summary: Find cells by type and location
+#+ description: Args: cell: the iri or a cell type; location: the iri of an anatomical location. All args are optional. With no args returns all cells with an anatomical location.  Returns: a 2 column table: cell (type) IRIs and cell (type) labels.
 
 #+ defaults:
-#+   - location: http://purl.obolibrary.org/obo/UBERON_0002113
+#+   - location: http://purl.obolibrary.org/obo/UBERON_0001062 # Anatomical Entity
+#+   - cell: http://purl.obolibrary.org/obo/CL_0000000 # Cell
 
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -12,7 +13,7 @@ PREFIX cell: <http://purl.obolibrary.org/obo/CL_0000000>
 SELECT DISTINCT ?cell_iri (STR(?qlabel) as ?cell_label)
 WHERE {
    ?cell_iri overlaps: ?_location_iri .
-   ?cell_iri rdfs:subClassOf cell: .
+   ?cell_iri rdfs:subClassOf ?_cell_iri .
    ?cell_iri rdfs:label ?qlabel .
   }
 
