@@ -1,0 +1,14 @@
+#+ summary: Get all subclasses of term entered.
+#+ description: Enter a term, get back a list of IRIs and labels
+
+#+ defaults:
+#+   - location: http://purl.obolibrary.org/obo/UBERON_0002113
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT DISTINCT ?cell_iri (STR(?qlabel) as ?cell_label)
+WHERE {
+   ?cell_iri rdfs:subClassOf: ?_input_iri .
+   ?cell_iri rdfs:label ?qlabel .
+  }
