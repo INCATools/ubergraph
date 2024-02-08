@@ -1,5 +1,7 @@
+#define RDFS_SUBCLASS_OF "<http://www.w3.org/2000/01/rdf-schema#subClassOf>"
 #define REFERENCE_COUNT "<http://reasoner.renci.org/vocab/referenceCount>"
 #define HAS_NORMALIZED_IC "<http://reasoner.renci.org/vocab/normalizedInformationContent>"
+#define HAS_NORMALIZED_SUBCLASS_IC "<http://reasoner.renci.org/vocab/normalizedSubClassInformationContent>"
 
 .functor logn(x: float): float
 
@@ -15,21 +17,30 @@
 
 references(sub, super) :- rdf(sub, _, super).
 
+subClassOf(sub, super) :- rdf(sub, RDFS_SUBCLASS_OF, super).
+
 term(t) :- references(t, _).
 
 totalTerms(c) :- c = count : { term(_) }.
 
 referenceCount(t, c) :- term(t), c = count : { references(_, t) }.
 
+subClassOfReferenceCount(t, c) :- term(t), c = count : { subClassOf(_, t) }.
+
 maxIC(-@logn(1.0/to_float(n))) :- totalTerms(n).
 
 normalizedIC(t, (-@logn(to_float(c)/to_float(total)))*scale) :- referenceCount(t, c), totalTerms(total), maxIC(maxic), scale=100.0/maxic.
 
+normalizedSubClassOfIC(t, (-@logn(to_float(c)/to_float(total)))*scale) :- subClassOfReferenceCount(t, c), totalTerms(total), maxIC(maxic), scale=100.0/maxic.
+
 icRDF(term, HAS_NORMALIZED_IC, ic, ".") :- normalizedIC(term, ic).
+
+subClassOfICRDF(term, HAS_NORMALIZED_SUBCLASSOF_IC, ic, ".") :- normalizedSubClassOfIC(term, ic).
 
 scRDF(term, REFERENCE_COUNT, c, ".") :- referenceCount(term, c).
 
 // sed 's/ /\t/' <ontology.nt | sed 's/ /\t/' | sed 's/ \.$//' >rdf.facts
 .input rdf
 .output icRDF
+.output subClassOfICRDF
 .output scRDF
