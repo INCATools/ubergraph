@@ -219,7 +219,7 @@ rdf.facts: properties-redundant.nt
 	sed 's/ /\t/' <$< | sed 's/ /\t/' | sed 's/ \.$$//' >$@
 
 ontrdf.facts: ontologies-merged.ttl
-	riot --output=ntriples $< | sed 's/ /\t/' | sed 's/ /\t/' | sed 's/ \.$$//' >$@
+	riot -q --nocheck --output=ntriples $< | sed 's/ /\t/' | sed 's/ /\t/' | sed 's/ \.$$//' >$@
 
 properties-nonredundant.nt: rdf.facts ontrdf.facts prune.dl
 	souffle -c prune.dl && mv nonredundant.csv $@
@@ -256,9 +256,9 @@ obo_prefixes.ttl:
 # The conversion back to turtle works around a problem with Blazegraph parsing on Java 11
 biolink-model.ttl:
 	curl -L 'https://raw.githubusercontent.com/biolink/biolink-model/v$(BIOLINK)/biolink-model.ttl' -o $@.tmp
-	riot --syntax=turtle --output=ntriples $@.tmp |\
+	riot -q --nocheck --syntax=turtle --output=ntriples $@.tmp |\
 	sed -E 's/<https:\/\/w3id.org\/biolink\/vocab\/([^[:space:]][^[:space:]]*):/<http:\/\/purl.obolibrary.org\/obo\/\1_/g' |\
-	riot --syntax=ntriples --output=turtle >$@
+	riot -q --nocheck --syntax=ntriples --output=turtle >$@
 
 ubergraph.jnl: build-metadata.nt ontologies-merged.ttl is_defined_by.ttl properties-nonredundant.nt properties-redundant.nt opposites.ttl lexically-derived-opposites.nt lexically-derived-opposites-inverse.nt biolink-model.ttl build-sparql/biolink-categories.ru information-content.ttl obo_prefixes.ttl
 	rm -f $@ &&\
