@@ -198,13 +198,11 @@ oarcs-base.owl: oarcs.owl
 			--trim false \
 			--output $@
 
-# Passing through RDF/XML to riot is due to https://github.com/INCATools/ubergraph/issues/126
 ontologies-merged.ttl: mirror
 	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
-	reason -r ELK -D debug.ofn -o $@.owl &&\
-	riot -q --nocheck --output=turtle $@.owl >$@
+	reason -r ELK -D debug.ofn -o $@
 
 ontologies-merged.ofn.gz: ontologies-merged.ttl
 	$(ROBOT) convert -i $< -o ontologies-merged.ofn && gzip ontologies-merged.ofn
