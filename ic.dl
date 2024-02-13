@@ -7,12 +7,16 @@
 
 .decl rdf(s: symbol, p: symbol, o: symbol)
 .decl references(sub: symbol, super: symbol)
+.decl subClassOf(sub: symbol, super: symbol)
 .decl term(t: symbol)
 .decl totalTerms(c: number)
 .decl referenceCount(term: symbol, c: number)
+.decl subClassOfReferenceCount(term: symbol, c: number)
 .decl maxIC(n: float)
 .decl normalizedIC(term: symbol, ic: float)
+.decl normalizedSubClassOfIC(term: symbol, ic: float)
 .decl icRDF(term: symbol, predicate: symbol, ic: float, dot: symbol)
+.decl subClassOfICRDF(term: symbol, predicate: symbol, ic: float, dot: symbol)
 .decl scRDF(term: symbol, predicate: symbol, c: number, dot: symbol)
 
 references(sub, super) :- rdf(sub, _, super).
