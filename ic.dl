@@ -39,7 +39,7 @@ normalizedSubClassOfIC(t, (-@logn(to_float(c)/to_float(total)))*scale) :- subCla
 
 icRDF(term, HAS_NORMALIZED_IC, ic, ".") :- normalizedIC(term, ic).
 
-subClassOfICRDF(term, HAS_NORMALIZED_SUBCLASSOF_IC, ic, ".") :- normalizedSubClassOfIC(term, ic).
+subClassOfICRDF(term, HAS_NORMALIZED_SUBCLASS_IC, ic, ".") :- normalizedSubClassOfIC(term, ic).
 
 scRDF(term, REFERENCE_COUNT, c, ".") :- referenceCount(term, c).
 
