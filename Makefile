@@ -202,8 +202,8 @@ ontologies-merged.ttl: mirror
 	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
-	reason -r ELK -D debug.ofn -o $@.tmp.ttl &&\
-	riot -q --nocheck --output=ntriples $@.tmp.ttl >$@ #workaround problematic Blazegraph parser
+	reason -r ELK -D debug.ofn -o $@.owl &&\
+	riot -q --nocheck --output=turtle $@.owl >$@
 
 ontologies-merged.ofn.gz: ontologies-merged.ttl
 	$(ROBOT) convert -i $< -o ontologies-merged.ofn && gzip ontologies-merged.ofn
