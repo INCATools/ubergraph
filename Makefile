@@ -1,9 +1,9 @@
-ROBOT_ENV=ROBOT_JAVA_ARGS=-Xmx120G
+ROBOT_ENV=ROBOT_JAVA_ARGS="-Xmx190G -XX:+UseParallelGC"
 ROBOT=$(ROBOT_ENV) robot
-RG_ENV=JAVA_OPTS=-Xmx190G
+RG_ENV=JAVA_OPTS="-Xmx190G -XX:+UseParallelGC"
 RG=$(RG_ENV) relation-graph
-BG_RUNNER=JAVA_OPTS=-Xmx50G blazegraph-runner
-JVM_ARGS=JVM_ARGS=-Xmx120G
+BG_RUNNER=JAVA_OPTS="-Xmx80G -XX:+UseParallelGC" blazegraph-runner
+JVM_ARGS=JVM_ARGS="-Xmx190G -XX:+UseParallelGC"
 ARQ=$(JVM_ARGS) arq
 BIOLINK=3.0.0
 
