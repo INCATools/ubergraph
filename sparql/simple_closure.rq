@@ -14,11 +14,11 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT DISTINCT ?subterm (STR(?subterm_label_obj) as ?subterm_label)
 WHERE {
   {
-   ?subterm part_of: ?_input_term .
+   ?subterm part_of: ?_input_term_iri .
    }
   UNION
   {
-    ?subterm rdfs:subClassOf ?_input_term .
+    ?subterm rdfs:subClassOf ?_input_term_iri .
   }
   ?subterm rdfs:label ?subterm_label_obj .
 }
