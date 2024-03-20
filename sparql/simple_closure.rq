@@ -1,0 +1,29 @@
+#+ summary: Find subterms
+#+ description: Enter a single ontology term iri, get back all parts and subclasses. Default (nephron tubule) added for demo purposes
+
+#+ defaults:
+#+   - input_term: http://purl.obolibrary.org/obo/UBERON_0001231 # nephron tubule
+
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX part_of: <http://purl.obolibrary.org/obo/BFO_0000050>
+PREFIX oboinowl: <http://www.geneontology.org/formats/oboInOwl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?subterm (STR(?subterm_label_obj) as ?subterm_label)
+WHERE {
+  {
+   ?subterm part_of: ?_input_term .
+   }
+  UNION
+  {
+    ?subterm rdfs:subClassOf ?_input_term .
+  }
+  ?subterm rdfs:label ?subterm_label_obj .
+}
+
+
+
+
+
