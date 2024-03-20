@@ -2,7 +2,7 @@
 #+ description: Enter a single ontology term iri, get back all parts and subclasses. Default (nephron tubule) added for demo purposes
 
 #+ defaults:
-#+   - input_term: http://purl.obolibrary.org/obo/UBERON_0001231 # nephron tubule
+#+   - inputTerm: http://purl.obolibrary.org/obo/UBERON_0001231 # nephron tubule
 
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -14,11 +14,11 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT DISTINCT ?subterm (STR(?subterm_label_obj) as ?subterm_label)
 WHERE {
   {
-   ?subterm part_of: ?_input_term_iri .
+   ?subterm part_of: ?_inputTerm_iri .
    }
   UNION
   {
-    ?subterm rdfs:subClassOf ?_input_term_iri .
+    ?subterm rdfs:subClassOf ?_inputTerm_iri .
   }
   ?subterm rdfs:label ?subterm_label_obj .
 }
