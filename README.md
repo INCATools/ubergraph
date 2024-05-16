@@ -56,7 +56,7 @@ Ubergraph paper presented at ICBO 2022: https://doi.org/10.5281/zenodo.7249759
 
 ### grlc API
 
-Example SPARQL queries are [included in the repo](https://github.com/INCATools/ubergraph/tree/master/sparql), and can be queried via an OpenAPI user interface at http://grlc.io/api/INCAtools/ubergraph/sparql/.
+Example SPARQL queries are [included in the repo](https://github.com/INCATools/ubergraph/tree/master/sparql), and can be queried via an OpenAPI user interface at https://grlc.io/api-git/INCATools/ubergraph/subdir/sparql.
 
 ## Graph organization
 
