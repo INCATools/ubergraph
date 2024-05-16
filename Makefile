@@ -202,6 +202,7 @@ ontologies-merged.ttl: mirror
 	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
+	query --update build-sparql/filter-bad-uri-values.ru \
 	reason -r ELK -D debug.ofn -o $@.owl &&\
 	riot -q --nocheck --output=turtle $@.owl >$@
 
