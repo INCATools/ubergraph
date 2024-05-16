@@ -205,7 +205,7 @@ ontologies-merged.ttl: mirror
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	query --update build-sparql/filter-bad-uri-values.ru \
 	reason -r ELK -D debug.ofn -o $@.owl &&\
-	$(RIOT) -q --nocheck --output=turtle $@.owl >$@
+	$(RIOT) -q --nocheck --stream=turtle $@.owl >$@
 
 ontologies-merged.ofn.gz: ontologies-merged.ttl
 	$(ROBOT) convert -i $< -o ontologies-merged.ofn && gzip ontologies-merged.ofn
