@@ -5,6 +5,7 @@ RG=$(RG_ENV) relation-graph
 BG_RUNNER=JAVA_OPTS="-Xmx80G -XX:+UseParallelGC" blazegraph-runner
 JVM_ARGS=JVM_ARGS="-Xmx180G -XX:+UseParallelGC"
 ARQ=$(JVM_ARGS) arq
+RIOT=$(JVM_ARGS) riot
 BIOLINK=3.0.0
 
 NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
@@ -204,7 +205,7 @@ ontologies-merged.ttl: mirror
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
 	query --update build-sparql/filter-bad-uri-values.ru \
 	reason -r ELK -D debug.ofn -o $@.owl &&\
-	riot -q --nocheck --output=turtle $@.owl >$@
+	$(RIOT) -q --nocheck --output=turtle $@.owl >$@
 
 ontologies-merged.ofn.gz: ontologies-merged.ttl
 	$(ROBOT) convert -i $< -o ontologies-merged.ofn && gzip ontologies-merged.ofn
@@ -219,7 +220,7 @@ rdf.facts: properties-redundant.nt
 	sed 's/ /\t/' <$< | sed 's/ /\t/' | sed 's/ \.$$//' >$@
 
 ontrdf.facts: ontologies-merged.ttl
-	riot -q --nocheck --output=ntriples $< | sed 's/ /\t/' | sed 's/ /\t/' | sed 's/ \.$$//' >$@
+	$(RIOT) -q --nocheck --output=ntriples $< | sed 's/ /\t/' | sed 's/ /\t/' | sed 's/ \.$$//' >$@
 
 properties-nonredundant.nt: rdf.facts ontrdf.facts prune.dl
 	souffle -c prune.dl && mv nonredundant.csv $@
