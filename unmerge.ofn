@@ -1,0 +1,18 @@
+Prefix(:=<http://purl.obolibrary.org/obo/go.owl#>)
+Prefix(dc:=<http://purl.org/dc/elements/1.1/>)
+Prefix(go:=<http://purl.obolibrary.org/obo/go#>)
+Prefix(obo:=<http://purl.obolibrary.org/obo/>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(obo1:=<http://www.geneontology.org/formats/oboInOwl#http://purl.obolibrary.org/obo/>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+Prefix(terms:=<http://purl.org/dc/terms/>)
+Prefix(terms2:=<http://www.geneontology.org/formats/oboInOwl#http://purl.org/dc/terms/>)
+Prefix(oboInOwl:=<http://www.geneontology.org/formats/oboInOwl#>)
+
+
+Ontology(
+AnnotationAssertion(obo:IAO_0000233 obo:GO_0034512 "- [ ] box C/D RNA 5'-end processing -> box C/D sno(s)RNA 5'-end processing"^^xsd:anyURI)
+)

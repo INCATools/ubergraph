@@ -199,13 +199,13 @@ oarcs-base.owl: oarcs.owl
 			--trim false \
 			--output $@
 
-ontologies-merged.ttl: mirror
+ontologies-merged.ttl: mirror unmerge.ofn
 	$(ROBOT) merge $(addprefix -i mirror/,$(shell ls mirror)) \
 	remove --axioms 'disjoint' --trim true --preserve-structure false \
 	remove --term 'owl:Nothing' --trim true --preserve-structure false \
-	query --update build-sparql/filter-bad-uri-values.ru \
+	unmerge -i unmerge.ofn \
 	reason -r ELK -D debug.ofn -o $@.owl &&\
-	$(RIOT) -q --nocheck --stream=ntriples $@.owl >$@
+	$(RIOT) -q --nocheck --output=turtle $@.owl >$@
 
 ontologies-merged.ofn.gz: ontologies-merged.ttl
 	$(ROBOT) convert -i $< -o ontologies-merged.ofn && gzip ontologies-merged.ofn
