@@ -40,6 +40,7 @@ http://purl.obolibrary.org/obo/uberon/bridge/cl-bridge-to-fbbt.owl
 http://purl.obolibrary.org/obo/uberon/bridge/uberon-bridge-to-caro.owl
 http://purl.obolibrary.org/obo/uberon/bridge/uberon-bridge-to-fbbt.owl
 http://purl.obolibrary.org/obo/uberon/uberon-base.owl
+http://purl.obolibrary.org/obo/uo.owl
 http://purl.obolibrary.org/obo/vbo/vbo-base.owl
 http://purl.obolibrary.org/obo/wbbt/wbbt-base.owl
 http://purl.obolibrary.org/obo/wbls/wbls-base.owl
