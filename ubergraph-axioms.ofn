@@ -81,4 +81,6 @@ SubObjectPropertyOf(ObjectPropertyChain(<http://purl.obolibrary.org/obo/BFO_0000
 SubObjectPropertyOf(ObjectPropertyChain(<http://purl.obolibrary.org/obo/UPHENO_0000001> <http://purl.obolibrary.org/obo/BFO_0000050>) <http://purl.obolibrary.org/obo/UPHENO_0000001>)
 SubObjectPropertyOf(ObjectPropertyChain(:decreasedAmountRole <http://purl.obolibrary.org/obo/RO_0000052>) :is_decrease_of)
 SubObjectPropertyOf(ObjectPropertyChain(:increasedAmountRole <http://purl.obolibrary.org/obo/RO_0000052>) :is_increase_of)
+# test consequences of propagating taxon constraints over 'regulates'
+SubObjectPropertyOf(ObjectPropertyChain(obo:RO_0002211 obo:RO_0002162) obo:RO_0002162)
 )
