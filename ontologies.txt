@@ -2,8 +2,7 @@ http://purl.obolibrary.org/obo/aism/aism-base.owl
 http://purl.obolibrary.org/obo/bspo.owl
 http://purl.obolibrary.org/obo/chebi.owl.gz
 http://purl.obolibrary.org/obo/cl/cl-base.owl
-http://purl.obolibrary.org/obo/cob/cob-base.owl
-http://purl.obolibrary.org/obo/cob/cob-to-external.owl
+http://purl.obolibrary.org/obo/cob.owl
 http://purl.obolibrary.org/obo/colao/colao-base.owl
 http://purl.obolibrary.org/obo/dpo/dpo-base.owl
 http://purl.obolibrary.org/obo/eco/eco-base.owl
