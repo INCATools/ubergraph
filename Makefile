@@ -12,7 +12,7 @@ NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
 
 all: ubergraph.jnl.gz ubergraph.nq.gz redundant-graph-table.tgz nonredundant-graph-table.tgz ontologies-merged.ofn.gz #ubergraph-oxigraph.tgz
 
-mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl foodon-base.owl to-base.owl peco-base.owl mro-base.owl hao-base.owl clao-base.owl oarcs-base.owl ubergraph-axioms.ofn
+mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl hsapdv-base.owl foodon-base.owl to-base.owl peco-base.owl mro-base.owl hao-base.owl clao-base.owl oarcs-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
 	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
 	cp ../pr-base.owl pr-base.owl &&\
@@ -20,6 +20,7 @@ mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-
 	cp ../ppo-base.owl ppo-base.owl &&\
 	cp ../apo-base.owl apo-base.owl &&\
 	cp ../mmusdv-base.owl mmusdv-base.owl &&\
+	cp ../hsapdv-base.owl hsapdv-base.owl &&\
 	cp ../foodon-base.owl foodon-base.owl &&\
 	cp ../to-base.owl to-base.owl &&\
 	cp ../peco-base.owl peco-base.owl &&\
@@ -93,6 +94,19 @@ mmusdv.owl:
 mmusdv-base.owl: mmusdv.owl
 	$(ROBOT) remove --input $< \
 		--base-iri 'http://purl.obolibrary.org/obo/MmusDv_' \
+		--axioms external \
+		--preserve-structure false \
+		--trim false \
+		remove --select imports \
+		--trim false \
+		--output $@
+
+hsapdv.owl:
+	curl -L -O 'http://purl.obolibrary.org/obo/hsapdv.owl'
+
+hsapdv-base.owl: hsapdv.owl
+	$(ROBOT) remove --input $< \
+		--base-iri 'http://purl.obolibrary.org/obo/HsapDv_' \
 		--axioms external \
 		--preserve-structure false \
 		--trim false \
