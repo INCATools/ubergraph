@@ -43,6 +43,7 @@ Ubergraph paper presented at ICBO 2022: https://doi.org/10.5281/zenodo.7249759
   - Zebrafish anatomy and development ontology (ZFA)
   - Ascomycete phenotype ontology (APO)
   - Mouse Developmental Stages (MmusDV)
+  - Human Developmental Stages (HsapDv)
   - Vertebrate Breed Ontology (VBO)
   - Units of Measurement Ontology (UO)
 - Precomputed OWL classification (class hierarchy)

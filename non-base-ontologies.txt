@@ -4,3 +4,5 @@ http://purl.obolibrary.org/obo/mmusdv.owl
 http://purl.obolibrary.org/obo/po.owl
 http://purl.obolibrary.org/obo/ppo.owl
 https://proconsortium.org/download/current/pro_nonreasoned.obo
+http://purl.obolibrary.org/obo/hsapdv.owl
+
