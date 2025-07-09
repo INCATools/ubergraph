@@ -46,3 +46,4 @@ http://purl.obolibrary.org/obo/wbls/wbls-base.owl
 http://purl.obolibrary.org/obo/wbphenotype/wbphenotype-base.owl
 http://purl.obolibrary.org/obo/zfa/zfa-base.owl
 https://w3id.org/orcidio/orcidio.owl
+https://purl.brain-bican.org/ontology/mbao/mbao-base.owl
