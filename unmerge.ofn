@@ -14,4 +14,7 @@ Prefix(oboInOwl:=<http://www.geneontology.org/formats/oboInOwl#>)
 Ontology(
 AnnotationAssertion(obo:IAO_0000233 obo:GO_0034512 "- [ ] box C/D RNA 5'-end processing -> box C/D sno(s)RNA 5'-end processing"^^xsd:anyURI)
 AnnotationAssertion(terms:date obo:FOODON_00004971 "2024-07-04 17:32:19"^^xsd:dateTime)
+AnnotationAssertion(oboInOwl:creation_date obo:ENVO_03600094 "2023-08-25T:17:42.901Z"^^xsd:dateTime)
+AnnotationAssertion(oboInOwl:creation_date obo:ENVO_03600095 "2023-08-25T:17:42.901Z"^^xsd:dateTime)
+AnnotationAssertion(oboInOwl:creation_date obo:ENVO_03600096 "2023-08-25T:17:42.901Z"^^xsd:dateTime)
 )
