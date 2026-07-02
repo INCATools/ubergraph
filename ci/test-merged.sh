@@ -41,7 +41,7 @@ make bspo-base.owl
 cd $ROOT_DIR
 
 cd obo-relations/src/ontology
-make ro-base.owl
+make IMP=false MIR=false ro-base.owl
 cd $ROOT_DIR
 
 cd obi
