@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ubergraph — an integrated OBO ontology knowledge graph</title>
+<meta name="description" content="Ubergraph merges 50+ OBO ontologies into a unified RDF knowledge graph with precomputed reasoning, served over a public SPARQL endpoint.">
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-alt:#f8fafc;
+    --surface:#ffffff;
+    --border:#e2e8f0;
+    --text:#0f172a;
+    --muted:#64748b;
+    --accent:#4f46e5;
+    --accent-2:#0d9488;
+    --accent-soft:#eef2ff;
+    --shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.06);
+    --radius:14px;
+    --maxw:1080px;
+  }
+  :root[data-theme="dark"]{
+    --bg:#0b1220;
+    --bg-alt:#0f172a;
+    --surface:#111a2e;
+    --border:#233150;
+    --text:#e2e8f0;
+    --muted:#94a3b8;
+    --accent:#818cf8;
+    --accent-2:#2dd4bf;
+    --accent-soft:#1a2540;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Inter",sans-serif;
+    color:var(--text);
+    background:var(--bg);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  code,kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em}
+  code{background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:.1em .4em}
+
+  /* Top bar */
+  header.top{
+    position:sticky;top:0;z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:saturate(180%) blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .top .wrap{display:flex;align-items:center;gap:16px;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+  .brand .dot{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:var(--shadow)}
+  .top nav{margin-left:auto;display:flex;align-items:center;gap:22px}
+  .top nav a{color:var(--muted);font-size:.92rem;font-weight:500}
+  .top nav a:hover{color:var(--text);text-decoration:none}
+  .icon-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:38px;height:38px;border-radius:10px;border:1px solid var(--border);
+    background:var(--surface);color:var(--text);cursor:pointer;font-size:1rem;
+  }
+  .icon-btn:hover{border-color:var(--accent)}
+  @media(max-width:720px){.top nav a.navlink{display:none}}
+
+  /* Hero */
+  .hero{padding:64px 0 40px;background:
+      radial-gradient(1000px 400px at 15% -10%, color-mix(in srgb,var(--accent) 14%,transparent), transparent),
+      radial-gradient(900px 400px at 100% 0%, color-mix(in srgb,var(--accent-2) 12%,transparent), transparent);}
+  .hero h1{font-size:clamp(2.1rem,5vw,3.3rem);line-height:1.08;margin:0 0 14px;letter-spacing:-.02em;font-weight:800}
+  .hero h1 .grad{background:linear-gradient(120deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{font-size:1.18rem;color:var(--muted);max-width:44rem;margin:0 0 26px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:11px;font-weight:600;font-size:.95rem;border:1px solid transparent;cursor:pointer}
+  .btn.primary{background:var(--accent);color:#fff}
+  .btn.primary:hover{filter:brightness(1.06);text-decoration:none}
+  .btn.ghost{background:var(--surface);border-color:var(--border);color:var(--text)}
+  .btn.ghost:hover{border-color:var(--accent);text-decoration:none}
+  .stats{display:flex;flex-wrap:wrap;gap:28px;margin-top:34px}
+  .stat .n{font-size:1.7rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(120deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .l{font-size:.85rem;color:var(--muted)}
+
+  section{padding:52px 0}
+  section h2{font-size:1.7rem;letter-spacing:-.02em;margin:0 0 6px;font-weight:800}
+  section .sub{color:var(--muted);margin:0 0 26px;max-width:46rem}
+
+  /* Explorer */
+  .explorer{background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .exp-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+  .exp-input{
+    flex:1 1 320px;display:flex;align-items:center;gap:8px;background:var(--surface);
+    border:1px solid var(--border);border-radius:12px;padding:4px 4px 4px 14px;box-shadow:var(--shadow)
+  }
+  .exp-input input{flex:1;border:0;outline:0;background:transparent;color:var(--text);font-size:1rem;padding:10px 0;min-width:0}
+  .exp-input .go{padding:10px 18px;border-radius:9px;border:0;background:var(--accent);color:#fff;font-weight:600;cursor:pointer}
+  .exp-input .go:hover{filter:brightness(1.06)}
+  .exp-select{background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-size:.9rem;cursor:pointer}
+  .exp-check{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-size:.9rem;cursor:pointer;user-select:none}
+  .exp-check input{cursor:pointer;margin:0;accent-color:var(--accent)}
+  .examples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}
+  .examples .lbl{color:var(--muted);font-size:.85rem;margin-right:2px}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px 12px;font-size:.83rem;color:var(--text);cursor:pointer}
+  .chip:hover{border-color:var(--accent);color:var(--accent)}
+  .graph-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .graph-head{padding:14px 18px;border-bottom:1px solid var(--border);font-size:.92rem}
+  .graph-head-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+  .graph-def{margin:9px 0 0;color:var(--muted);font-size:.88rem;line-height:1.5;max-width:82ch}
+  .graph-def:empty{display:none}
+  .graph-head .title{font-weight:700}
+  .graph-head .meta{color:var(--muted)}
+  .graph-head .spacer{flex:1}
+  .graph-head .lnk{font-size:.85rem;color:var(--muted)}
+  .graph-body{position:relative;min-height:420px;max-height:78vh;overflow:auto;padding:10px;background:
+      repeating-linear-gradient(0deg,transparent,transparent 23px,color-mix(in srgb,var(--border) 40%,transparent) 24px),
+      repeating-linear-gradient(90deg,transparent,transparent 23px,color-mix(in srgb,var(--border) 40%,transparent) 24px)}
+  .graph-body svg{max-width:none;display:block;margin:0 auto}
+  /* Mute the CURIE line (always the last text line) on multi-line node labels */
+  .graph-body svg .node text tspan.text-outer-tspan:last-child:not(:first-child){fill-opacity:.6}
+  .state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px;color:var(--muted)}
+  .state.hidden{display:none}
+  .spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--accent);animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;padding:12px 18px;border-top:1px solid var(--border);font-size:.82rem;color:var(--muted)}
+  .legend .k{display:inline-flex;align-items:center;gap:7px}
+  .legend .swatch{width:26px;height:0;border-top-width:3px;border-top-style:solid;display:inline-block}
+  .legend .focusdot{width:14px;height:14px;border-radius:5px;background:var(--accent);display:inline-block}
+  .hint{color:var(--muted);font-size:.85rem;margin-top:12px}
+
+  /* Cards grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 8px;font-size:1.08rem;display:flex;align-items:center;gap:8px}
+  .card p{margin:0 0 10px;color:var(--muted);font-size:.94rem}
+  .card .badge{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:6px}
+  .named-graph{font-family:ui-monospace,monospace;font-size:.82rem;color:var(--accent-2);word-break:break-all}
+
+  /* Ontology chips */
+  .onto-list{display:flex;flex-wrap:wrap;gap:8px}
+  .onto{display:inline-flex;align-items:baseline;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:7px 11px;font-size:.86rem}
+  .onto b{color:var(--accent);font-family:ui-monospace,monospace;font-size:.82rem}
+
+  footer{border-top:1px solid var(--border);padding:34px 0;color:var(--muted);font-size:.9rem}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+  footer a{color:var(--muted)}
+  footer a:hover{color:var(--text)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span> Ubergraph</div>
+    <nav>
+      <a class="navlink" href="#explore">Explore</a>
+      <a class="navlink" href="#query">Query</a>
+      <a class="navlink" href="#graphs">Graphs</a>
+      <a class="navlink" href="#downloads">Downloads</a>
+      <a class="navlink" href="https://github.com/INCATools/ubergraph">GitHub</a>
+      <button class="icon-btn" id="themeToggle" title="Toggle light/dark" aria-label="Toggle theme">🌙</button>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>An integrated <span class="grad">OBO ontology</span><br>knowledge graph</h1>
+    <p class="lead">Ubergraph merges 50+ mutually referential biomedical and life-science ontologies into a single RDF triplestore with precomputed inference closures for all relations — queryable over a public SPARQL endpoint.</p>
+    <div class="cta">
+      <a class="btn primary" href="#explore">▸ Explore a term</a>
+      <a class="btn ghost" href="https://api.triplydb.com/s/oQgG4f0gs">Query the SPARQL endpoint</a>
+      <a class="btn ghost" href="https://doi.org/10.5281/zenodo.7249759">Read the paper</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="n">50+</div><div class="l">integrated ontologies</div></div>
+      <div class="stat"><div class="n">ELK</div><div class="l">precomputed classification</div></div>
+      <div class="stat"><div class="n">4 core graphs</div><div class="l">organize the inferences</div></div>
+      <div class="stat"><div class="n">Open</div><div class="l">public SPARQL &amp; downloads</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPLORER -->
+<section class="explorer" id="explore">
+  <div class="wrap">
+    <h2>Explore a term's neighborhood</h2>
+    <p class="sub">Enter an OBO ID (<code>CL:0000080</code>) or full IRI to see its relationships in the <b>nonredundant</b> graph. Subsumers sit toward the top; <code>subClassOf</code> runs vertically. Click any node to re-center on it.</p>
+
+    <div class="exp-controls">
+      <div class="exp-input">
+        <input id="termInput" type="text" placeholder="e.g. CL:0000080  or  http://purl.obolibrary.org/obo/GO_0006915" spellcheck="false" autocomplete="off">
+        <button class="go" id="goBtn">Show</button>
+      </div>
+      <select class="exp-select" id="limitSelect" title="Max neighbors per direction">
+        <option value="12">12 / direction</option>
+        <option value="20" selected>20 / direction</option>
+        <option value="35">35 / direction</option>
+        <option value="60">60 / direction</option>
+      </select>
+      <label class="exp-check" title="Also draw edges between the neighboring terms (can get busy)">
+        <input type="checkbox" id="interlinksToggle"> links among neighbors
+      </label>
+    </div>
+
+    <div class="examples">
+      <span class="lbl">Try:</span>
+      <button class="chip" data-id="CL:0000080">circulating cell</button>
+      <button class="chip" data-id="GO:0006915">apoptotic process</button>
+      <button class="chip" data-id="UBERON:0002101">limb</button>
+      <button class="chip" data-id="HP:0001250">Seizure</button>
+      <button class="chip" data-id="CHEBI:15377">water</button>
+      <button class="chip" data-id="MONDO:0005015">diabetes mellitus</button>
+    </div>
+
+    <div class="graph-card">
+      <div class="graph-head">
+        <div class="graph-head-top">
+          <span class="title" id="ghTitle">Term neighborhood</span>
+          <span class="meta" id="ghMeta"></span>
+          <span class="spacer"></span>
+          <a class="lnk" id="ghExternal" href="#" target="_blank" rel="noopener" style="display:none">open in OLS ↗</a>
+        </div>
+        <p class="graph-def" id="ghDef"></p>
+      </div>
+      <div class="graph-body" id="graphBody">
+        <div class="state" id="graphState">
+          <div class="spinner"></div>
+          <div id="stateMsg">Loading…</div>
+        </div>
+        <div id="graphOut"></div>
+      </div>
+      <div class="legend">
+        <span class="k"><span class="focusdot"></span> focus term</span>
+        <span class="k"><span class="swatch" style="border-top-color:var(--accent-2)"></span> subClassOf (thick)</span>
+        <span class="k"><span class="swatch" style="border-top-color:var(--muted)"></span> other relations (labeled)</span>
+        <span class="k" style="margin-left:auto">arrows point from term → toward subsumer/target</span>
+      </div>
+    </div>
+    <p class="hint">Data is fetched live from the Ubergraph SPARQL endpoint. High-level terms can have thousands of subclasses; results are capped per direction and the true totals are shown above the graph.</p>
+  </div>
+</section>
+
+<!-- QUERY -->
+<section id="query">
+  <div class="wrap">
+    <h2>Query the data</h2>
+    <p class="sub">Everything is available over standard SPARQL, with example queries and an OpenAPI wrapper.</p>
+    <div class="grid">
+      <div class="card">
+        <h3><span class="badge">endpoint</span> SPARQL</h3>
+        <p>Query all named graphs directly at the public endpoint:</p>
+        <p><code>https://ubergraph.apps.renci.org/sparql</code></p>
+        <p><a href="https://api.triplydb.com/s/oQgG4f0gs">Open a sample query in YASGUI ↗</a></p>
+      </div>
+      <div class="card">
+        <h3><span class="badge">api</span> grlc / OpenAPI</h3>
+        <p>Curated example queries in the repo are exposed as a REST API with an interactive UI via grlc.</p>
+        <p><a href="https://grlc.io/api-git/INCATools/ubergraph/subdir/sparql">Browse the grlc API ↗</a></p>
+      </div>
+      <div class="card">
+        <h3><span class="badge">tips</span> Getting labels</h3>
+        <p>Include the <code>ontology</code> graph for <code>rdfs:label</code>. Match <code>rdfs:isDefinedBy</code> to find a term's source ontology quickly.</p>
+        <p><a href="https://github.com/INCATools/ubergraph/tree/master/sparql">See example queries ↗</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GRAPHS -->
+<section id="graphs" style="background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <h2>Graph organization</h2>
+    <p class="sub">The triplestore is organized into named graphs — the four primary graphs below, plus a separate named graph holding each individual source ontology. All predicates other than <code>rdfs:subClassOf</code> in the redundant / nonredundant graphs denote OWL existential restrictions — e.g. <code>X part_of Y</code> means <code>X SubClassOf (part_of some Y)</code>.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Ontology</h3>
+        <p class="named-graph">http://reasoner.renci.org/ontology</p>
+        <p>Merged logical &amp; annotation axioms, ELK classification, <code>rdfs:isDefinedBy</code> links, and normalized information-content scores. Include this for term labels.</p>
+      </div>
+      <div class="card">
+        <h3>Redundant</h3>
+        <p class="named-graph">http://reasoner.renci.org/redundant</p>
+        <p>The complete inference closure for all subclass and existential relations, including transitive and reflexive edges.</p>
+      </div>
+      <div class="card">
+        <h3>Nonredundant</h3>
+        <p class="named-graph">http://reasoner.renci.org/nonredundant</p>
+        <p>A pruned subset of the redundant graph with the same semantics — the compact view used by the explorer above.</p>
+      </div>
+      <div class="card">
+        <h3>Biolink</h3>
+        <p class="named-graph">https://biolink.github.io/biolink-model/</p>
+        <p>The Biolink model in RDF, plus term-to-category mappings via <code>biolink:category</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section id="ontologies">
+  <div class="wrap">
+    <h2>What's inside</h2>
+    <p class="sub">A merged set of mutually referential OBO ontologies spanning anatomy, phenotypes, diseases, chemistry, environment, and more.</p>
+    <div class="onto-list" id="ontoList"></div>
+  </div>
+</section>
+
+<!-- DOWNLOADS -->
+<section id="downloads" style="background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <h2>Downloads</h2>
+    <p class="sub">Files for the current build are published at RENCI.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>RDF N-Quads</h3>
+        <p>Full four-column dump (subject, predicate, object, graph).</p>
+        <p><a href="https://ubergraph.apps.renci.org/downloads/current/ubergraph.nq.gz">ubergraph.nq.gz ↗</a></p>
+      </div>
+      <div class="card">
+        <h3>Blazegraph journal</h3>
+        <p>The ready-to-run Blazegraph database file.</p>
+        <p><a href="https://ubergraph.apps.renci.org/downloads/current/ubergraph.jnl.gz">ubergraph.jnl.gz ↗</a></p>
+      </div>
+      <div class="card">
+        <h3>Graph tables</h3>
+        <p>Integer-based edge tables for graph analysis &amp; ML — nodes, edges, and labels.</p>
+        <p>
+          <a href="https://ubergraph.apps.renci.org/downloads/current/nonredundant-graph-table.tgz">nonredundant ↗</a> ·
+          <a href="https://ubergraph.apps.renci.org/downloads/current/redundant-graph-table.tgz">redundant ↗</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      Ubergraph is developed with support from the <a href="https://github.com/NCATSTranslator">NCATS Biomedical Data Translator</a> project and <a href="https://renci.org">RENCI</a>.
+    </div>
+    <div>
+      <a href="https://github.com/INCATools/ubergraph">GitHub</a> ·
+      <a href="https://doi.org/10.5281/zenodo.7249759">Paper</a> ·
+      <a href="https://ubergraph.apps.renci.org/sparql">SPARQL</a>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+const ENDPOINT   = 'https://ubergraph.apps.renci.org/sparql';
+const G_NONRED   = 'http://reasoner.renci.org/nonredundant';
+const G_ONTOLOGY = 'http://reasoner.renci.org/ontology';
+const RDFS_SUBCLASS = 'http://www.w3.org/2000/01/rdf-schema#subClassOf';
+const OBO = 'http://purl.obolibrary.org/obo/';
+const NODE_RADIUS = 6; // node corner radius, applied as an SVG attribute (Safari ignores CSS rx/ry)
+
+// OBO prefixes that are not simply all-uppercase.
+const MIXED_CASE = {
+  NCBITAXON:'NCBITaxon', FBBT:'FBbt', FBDV:'FBdv', FBCV:'FBcv',
+  WBBT:'WBbt', WBLS:'WBls', WBPHENOTYPE:'WBPhenotype',
+  MMUSDV:'MmusDv', HSAPDV:'HsapDv'
+};
+
+const ONTOLOGIES = [
+  // Anatomy & cells
+  ['UBERON','Uberon anatomy'],['CL','Cell Ontology'],['PCL','Provisional Cell Ontology'],
+  ['MA','Mouse anatomy'],['EMAPA','Mouse developmental anatomy'],['MBAO','Mouse brain atlas'],
+  ['ZFA','Zebrafish anatomy'],['WBbt','C. elegans anatomy'],['FBbt','Drosophila anatomy'],
+  ['AISM','Insect skeletomuscular anatomy'],['COLAO','Coleoptera anatomy'],['LEPAO','Lepidoptera anatomy'],
+  ['HAO','Hymenoptera anatomy'],['CLAO','Collembola anatomy'],['OARCS','Arthropod circulatory systems'],
+  ['BSPO','Biological spatial'],
+  // Life stages & development
+  ['HsapDv','Human developmental stages'],['MmusDv','Mouse developmental stages'],
+  ['FBdv','Drosophila development'],['WBls','C. elegans development'],
+  // Phenotypes, traits & disease
+  ['HP','Human Phenotype'],['MP','Mammalian Phenotype'],['FYPO','Fission Yeast Phenotype'],
+  ['APO','Ascomycete Phenotype'],['DPO','Drosophila Phenotype'],['WBPhenotype','C. elegans Phenotype'],
+  ['OBA','Biological Attributes'],['PATO','Phenotype &amp; Trait'],['MONDO','Mondo Disease'],
+  ['MAXO','Medical Action'],['NBO','Neuro Behavior'],
+  // Genes, molecules & chemistry
+  ['GO','Gene Ontology'],['SO','Sequence Ontology'],['PR','Protein Ontology'],
+  ['MI','Molecular Interactions'],['MRO','MHC Restriction'],['CHEBI','Chemical Entities (ChEBI)'],
+  ['CHMO','Chemical Methods'],
+  // Environment, ecology & plants
+  ['ENVO','Environment'],['ECTO','Exposures (ECTO)'],['PCO','Population &amp; Community'],
+  ['PO','Plant Ontology'],['PPO','Plant Phenology'],['TO','Plant Trait'],['PECO','Plant exp. conditions'],
+  // Evidence, investigations & upper-level
+  ['OBI','Biomedical Investigations'],['ECO','Evidence &amp; Conclusion'],['IAO','Information Artifact'],
+  ['RO','Relations Ontology'],['COB','Core Biology &amp; Biomedicine'],['MMO','Measurement Method'],
+  ['UO','Units of Measurement'],['FBcv','FlyBase Vocabulary'],
+  // Organisms, breeds & identifiers
+  ['NCBITaxon','NCBI Taxonomy'],['NCIT','NCIt OBO Edition'],['VBO','Vertebrate Breed'],
+  ['FOODON','Food Ontology'],['ORCIDIO','ORCID researcher IDs']
+];
+
+const PALETTE = ['#2563eb','#0d9488','#db2777','#d97706','#7c3aed','#059669',
+                 '#dc2626','#0891b2','#ca8a04','#4f46e5','#be123c','#15803d',
+                 '#9333ea','#0369a1','#b45309','#65a30d'];
+
+/* ---------- helpers ---------- */
+// Node/edge labels are rendered as native SVG text (htmlLabels:false), which is
+// reliable across browsers (Safari mis-sizes Mermaid's foreignObject labels and
+// piles the text). In this mode `<br/>` still forces a line break and raw
+// &, <, > render literally; only a double quote would terminate the label, so
+// swap it for a typographic quote.
+function esc(s){ return String(s).replace(/"/g,'”'); }
+function prefixOf(iri){
+  if(iri.startsWith(OBO)){
+    const local = iri.slice(OBO.length);
+    const i = local.indexOf('_');
+    return i>0 ? local.slice(0,i) : local;
+  }
+  try{ const u=new URL(iri); return (u.hostname.split('.')[0]||'iri'); }catch(e){ return 'iri'; }
+}
+function curie(iri){
+  if(iri.startsWith(OBO)){
+    const local = iri.slice(OBO.length);
+    const i = local.indexOf('_');
+    return i>0 ? local.slice(0,i)+':'+local.slice(i+1) : local;
+  }
+  return iri.replace(/^https?:\/\//,'').replace(/[#/]$/,'').split(/[#/]/).pop() || iri;
+}
+function toIRI(input){
+  let s = (input||'').trim();
+  if(!s) return null;
+  if(/^https?:\/\//i.test(s)) return s;
+  const m = s.match(/^([A-Za-z][A-Za-z0-9]*)[:_](.+)$/);
+  if(m){
+    let pfx = m[1];
+    pfx = MIXED_CASE[pfx.toUpperCase()] || pfx.toUpperCase();
+    return OBO + pfx + '_' + m[2].trim();
+  }
+  return null;
+}
+
+/* ---------- SPARQL ---------- */
+async function sparql(query){
+  // POST (form-urlencoded) avoids URL-length limits — the interlinks query lists every neighbor IRI.
+  const r = await fetch(ENDPOINT, {
+    method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded', 'Accept':'application/sparql-results+json'},
+    body:'query=' + encodeURIComponent(query)
+  });
+  if(!r.ok) throw new Error('SPARQL endpoint returned HTTP '+r.status);
+  return (await r.json()).results.bindings;
+}
+function neighborhoodQuery(iri, limit, rolFilter){
+  const T = '<'+iri+'>';
+  return `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?dir ?s (SAMPLE(?sl0) AS ?sl) ?p (SAMPLE(?pl0) AS ?pl) ?o (SAMPLE(?ol0) AS ?ol) WHERE {
+  {
+    SELECT ("out" AS ?dir) ?s ?p ?o WHERE {
+      GRAPH <${G_NONRED}> { ${T} ?p ?o . BIND(${T} AS ?s) FILTER(?o != ${T}) ${rolFilter} }
+    } LIMIT ${limit}
+  } UNION {
+    SELECT ("in" AS ?dir) ?s ?p ?o WHERE {
+      GRAPH <${G_NONRED}> { ?s ?p ${T} . BIND(${T} AS ?o) FILTER(?s != ${T}) ${rolFilter} }
+    } LIMIT ${limit}
+  }
+  OPTIONAL { GRAPH <${G_ONTOLOGY}> { ?s rdfs:label ?sl0 } }
+  OPTIONAL { GRAPH <${G_ONTOLOGY}> { ?o rdfs:label ?ol0 } }
+  OPTIONAL { GRAPH <${G_ONTOLOGY}> { ?p rdfs:label ?pl0 } }
+}
+GROUP BY ?dir ?s ?p ?o`;
+}
+function countQuery(iri, rolFilter){
+  const T = '<'+iri+'>';
+  return `SELECT ?dir (COUNT(*) AS ?c) WHERE {
+  GRAPH <${G_NONRED}> {
+    { ${T} ?p ?o . FILTER(?o != ${T}) ${rolFilter} BIND("out" AS ?dir) }
+    UNION
+    { ?s ?p ${T} . FILTER(?s != ${T}) ${rolFilter} BIND("in" AS ?dir) }
+  }
+} GROUP BY ?dir`;
+}
+// Rolification properties (reasoning artifacts like "is anatomical entity") are
+// exactly those declared via an owl:hasSelf restriction. Fetch them once and
+// filter them out of the graph — they carry no browsing value.
+function rolificationQuery(){
+  return `PREFIX owl: <http://www.w3.org/2002/07/owl#>
+SELECT DISTINCT ?R WHERE { GRAPH <${G_ONTOLOGY}> { ?restr owl:onProperty ?R ; owl:hasSelf ?self } }`;
+}
+let _rolifications = null;
+function getRolifications(){
+  if(!_rolifications){
+    _rolifications = sparql(rolificationQuery()).then(b => b.map(r => r.R.value)).catch(() => []);
+  }
+  return _rolifications;
+}
+function focusInfoQuery(iri){
+  return `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?l ?def WHERE {
+  GRAPH <${G_ONTOLOGY}> {
+    OPTIONAL { <${iri}> rdfs:label ?l }
+    OPTIONAL { <${iri}> <http://purl.obolibrary.org/obo/IAO_0000115> ?def }
+  }
+} LIMIT 1`;
+}
+// Edges between the focus term's neighbors (the induced subgraph on those nodes).
+function interlinksQuery(iris, rolFilter){
+  const values = iris.map(i=>'<'+i+'>').join(' ');
+  return `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?s ?p (SAMPLE(?pl0) AS ?pl) ?o WHERE {
+  VALUES ?s { ${values} }
+  VALUES ?o { ${values} }
+  GRAPH <${G_NONRED}> { ?s ?p ?o }
+  FILTER(?s != ?o)
+  ${rolFilter}
+  OPTIONAL { GRAPH <${G_ONTOLOGY}> { ?p rdfs:label ?pl0 } }
+}
+GROUP BY ?s ?p ?o`;
+}
+
+/* ---------- theme ---------- */
+function themeColors(){
+  const dark = document.documentElement.getAttribute('data-theme')==='dark';
+  return dark ? {
+    nodeSurface:'#1e293b', nodeText:'#e2e8f0', line:'#5b6b85',
+    subclass:'#2dd4bf', accent:'#818cf8', accentStroke:'#c7d2fe',
+    edgeLabelBg:'#0f172a'
+  } : {
+    nodeSurface:'#ffffff', nodeText:'#0f172a', line:'#94a3b8',
+    subclass:'#0d9488', accent:'#4f46e5', accentStroke:'#312e81',
+    edgeLabelBg:'#f8fafc'
+  };
+}
+
+/* ---------- diagram building ---------- */
+function predLabel(iri, label){
+  if(iri === RDFS_SUBCLASS) return 'is a';
+  return label || curie(iri);
+}
+function buildMermaid(focusIri, rows, interEdges){
+  const C = themeColors();
+  mermaid.initialize({
+    startOnLoad:false, securityLevel:'loose', theme:'base', htmlLabels:false,
+    flowchart:{ curve:'basis', nodeSpacing:45, rankSpacing:70, padding:10, htmlLabels:false, useMaxWidth:false },
+    themeVariables:{
+      fontFamily:'-apple-system,Segoe UI,Roboto,sans-serif', fontSize:'13px',
+      lineColor:C.line, textColor:C.nodeText, edgeLabelBackground:C.edgeLabelBg,
+      mainBkg:C.nodeSurface, primaryTextColor:C.nodeText
+    }
+  });
+
+  const nodes = new Map();   // iri -> {id, label}
+  const prefixClass = new Map(); // prefix -> className
+  function idFor(iri, label){
+    if(!nodes.has(iri)){
+      nodes.set(iri, {id:'n'+nodes.size, label: label || curie(iri)});
+    }else if(label && !nodes.get(iri).label){
+      nodes.get(iri).label = label;
+    }
+    return nodes.get(iri).id;
+  }
+
+  const edges = [];
+  for(const r of rows){
+    const s = r.s.value, o = r.o.value, p = r.p.value;
+    const sid = idFor(s, r.sl && r.sl.value);
+    const oid = idFor(o, r.ol && r.ol.value);
+    edges.push({sid, oid, p, plabel:predLabel(p, r.pl && r.pl.value),
+                isSub:p===RDFS_SUBCLASS});
+  }
+  // Edges among the neighbors themselves — both endpoints are already nodes from `rows`.
+  for(const r of (interEdges || [])){
+    const p = r.p.value;
+    edges.push({sid:idFor(r.s.value), oid:idFor(r.o.value), p,
+                plabel:predLabel(p, r.pl && r.pl.value), isSub:p===RDFS_SUBCLASS});
+  }
+
+  const L = [];
+  L.push('flowchart BT');
+
+  // node declarations — name on top, CURIE on a muted second line (styled via CSS)
+  for(const [iri, n] of nodes){
+    const cur  = curie(iri);
+    const text = (n.label && n.label !== cur) ? `${esc(n.label)}<br/>${esc(cur)}` : esc(cur);
+    L.push(`${n.id}["${text}"]`);
+  }
+
+  // edges
+  const subIdx = [], otherIdx = [];
+  edges.forEach((e,i)=>{
+    if(e.isSub){ L.push(`${e.sid} ==> ${e.oid}`); subIdx.push(i); }
+    else{ L.push(`${e.sid} -->|"${esc(e.plabel)}"| ${e.oid}`); otherIdx.push(i); }
+  });
+
+  // classDefs by prefix
+  let pi = 0;
+  for(const [iri, n] of nodes){
+    const pfx = prefixOf(iri);
+    if(!prefixClass.has(pfx)){
+      const color = PALETTE[pi % PALETTE.length]; pi++;
+      const cls = 'p'+prefixClass.size;
+      prefixClass.set(pfx, {cls, color});
+      L.push(`classDef ${cls} fill:${C.nodeSurface},stroke:${color},stroke-width:2px,color:${C.nodeText};`);
+    }
+  }
+  L.push(`classDef focusNode fill:${C.accent},stroke:${C.accentStroke},stroke-width:3px,color:#ffffff;`);
+
+  const focusId = nodes.has(focusIri) ? nodes.get(focusIri).id : null;
+  for(const [iri, n] of nodes){
+    if(iri === focusIri) continue;
+    L.push(`class ${n.id} ${prefixClass.get(prefixOf(iri)).cls};`);
+  }
+  if(focusId) L.push(`class ${focusId} focusNode;`);
+
+  // link styling
+  if(subIdx.length)   L.push(`linkStyle ${subIdx.join(',')} stroke:${C.subclass},stroke-width:2.5px;`);
+  if(otherIdx.length) L.push(`linkStyle ${otherIdx.join(',')} stroke:${C.line},stroke-width:1.5px;`);
+
+  // click handlers (skip focus)
+  for(const [iri, n] of nodes){
+    if(iri === focusIri) continue;
+    L.push(`click ${n.id} call navTo("${iri}")`);
+  }
+
+  return L.join('\n');
+}
+
+/* ---------- rendering ---------- */
+const els = {
+  input: document.getElementById('termInput'),
+  go: document.getElementById('goBtn'),
+  limit: document.getElementById('limitSelect'),
+  interlinks: document.getElementById('interlinksToggle'),
+  state: document.getElementById('graphState'),
+  stateMsg: document.getElementById('stateMsg'),
+  out: document.getElementById('graphOut'),
+  title: document.getElementById('ghTitle'),
+  meta: document.getElementById('ghMeta'),
+  def: document.getElementById('ghDef'),
+  external: document.getElementById('ghExternal'),
+};
+let renderSeq = 0;
+
+function setState(msg, spinner){
+  els.state.classList.remove('hidden');
+  els.stateMsg.textContent = msg;
+  els.state.querySelector('.spinner').style.display = spinner ? '' : 'none';
+  els.out.innerHTML = '';
+}
+function clearState(){ els.state.classList.add('hidden'); }
+
+async function loadTerm(rawInput){
+  const iri = toIRI(rawInput);
+  if(!iri){
+    setState('Could not parse "'+rawInput+'". Use an OBO ID like CL:0000080 or a full http(s) IRI.', false);
+    els.title.textContent = 'Term neighborhood';
+    els.meta.textContent = ''; els.def.textContent = ''; els.external.style.display='none';
+    return;
+  }
+  els.input.value = curie(iri);
+  history.replaceState(null,'', '#term='+encodeURIComponent(curie(iri)));
+
+  const seq = ++renderSeq;
+  const limit = parseInt(els.limit.value,10) || 20;
+  setState('Querying Ubergraph…', true);
+  els.def.textContent = '';   // clear any stale definition while loading
+  els.external.href = 'https://www.ebi.ac.uk/ols4/search?q='+encodeURIComponent(curie(iri));
+  els.external.style.display = '';
+
+  try{
+    const rolifications = await getRolifications();
+    if(seq !== renderSeq) return;
+    const rolFilter = rolifications.length
+      ? `FILTER(?p NOT IN (${rolifications.map(i=>'<'+i+'>').join(', ')}))` : '';
+
+    const [rows, counts, info] = await Promise.all([
+      sparql(neighborhoodQuery(iri, limit, rolFilter)),
+      sparql(countQuery(iri, rolFilter)),
+      sparql(focusInfoQuery(iri)).catch(()=>[])
+    ]);
+    if(seq !== renderSeq) return; // superseded by a newer request
+
+    const row0 = info[0] || {};
+    els.title.textContent = (row0.l && row0.l.value) || curie(iri);
+    els.def.textContent = (row0.def && row0.def.value) || '';
+    const cnt = {out:0, in:0};
+    counts.forEach(c=>{ cnt[c.dir.value] = parseInt(c.c.value,10); });
+
+    if(rows.length === 0){
+      setState('No relationships found for '+curie(iri)+' in the nonredundant graph. Double-check the ID.', false);
+      els.meta.textContent = curie(iri);
+      return;
+    }
+    const shownOut = rows.filter(r=>r.dir.value==='out').length;
+    const shownIn  = rows.filter(r=>r.dir.value==='in').length;
+    const part = (shown,total,word)=> shown<total ? `${shown} of ${total} ${word}` : `${total} ${word}`;
+    els.meta.textContent = `${curie(iri)} · ${part(shownOut,cnt.out,'outgoing')}, ${part(shownIn,cnt.in,'incoming')}`;
+
+    // Second pass (opt-in): edges among the neighbors (needs the resolved node set from `rows`).
+    let interEdges = [];
+    if(els.interlinks.checked){
+      const nbrIris = [...new Set(rows.flatMap(r=>[r.s.value, r.o.value]))].filter(x=>x!==iri);
+      if(nbrIris.length >= 2){
+        interEdges = await sparql(interlinksQuery(nbrIris, rolFilter)).catch(()=>[]);
+        if(seq !== renderSeq) return;
+      }
+    }
+    if(interEdges.length) els.meta.textContent += ` · ${interEdges.length} among neighbors`;
+
+    const diagram = buildMermaid(iri, rows, interEdges);
+    const id = 'ubergraph-mermaid-'+seq;
+    const {svg, bindFunctions} = await mermaid.render(id, diagram);
+    if(seq !== renderSeq) return;
+    els.out.innerHTML = svg;
+    // Round node corners via the rx/ry attributes — Safari ignores the CSS rx/ry that classDef would emit.
+    els.out.querySelectorAll('g.node rect').forEach(r=>{ r.setAttribute('rx', NODE_RADIUS); r.setAttribute('ry', NODE_RADIUS); });
+    bindFunctions && bindFunctions(els.out);
+    clearState();
+  }catch(err){
+    if(seq !== renderSeq) return;
+    console.error(err);
+    setState('Something went wrong: '+err.message, false);
+  }
+}
+
+// exposed for Mermaid click callbacks
+window.navTo = function(iri){ loadTerm(iri); document.getElementById('explore').scrollIntoView({behavior:'smooth',block:'start'}); };
+
+/* ---------- wiring ---------- */
+els.go.addEventListener('click', ()=>loadTerm(els.input.value));
+els.input.addEventListener('keydown', e=>{ if(e.key==='Enter') loadTerm(els.input.value); });
+els.limit.addEventListener('change', ()=>{ if(els.input.value.trim()) loadTerm(els.input.value); });
+els.interlinks.addEventListener('change', ()=>{ if(els.input.value.trim()) loadTerm(els.input.value); });
+document.querySelectorAll('.chip[data-id]').forEach(c=>{
+  c.addEventListener('click', ()=>loadTerm(c.getAttribute('data-id')));
+});
+
+/* ontology chips */
+document.getElementById('ontoList').innerHTML =
+  ONTOLOGIES.map(([abbr,name])=>`<span class="onto"><b>${abbr}</b> ${name}</span>`).join('');
+
+/* theme toggle */
+const toggle = document.getElementById('themeToggle');
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  toggle.textContent = t==='dark' ? '☀️' : '🌙';
+  try{ localStorage.setItem('ubergraph-theme', t); }catch(e){}
+}
+(function initTheme(){
+  let t = null;
+  try{ t = localStorage.getItem('ubergraph-theme'); }catch(e){}
+  if(!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  applyTheme(t);
+})();
+toggle.addEventListener('click', ()=>{
+  const next = document.documentElement.getAttribute('data-theme')==='dark' ? 'light':'dark';
+  applyTheme(next);
+  if(els.input.value.trim()) loadTerm(els.input.value); // re-theme the graph
+});
+
+/* initial term: from URL hash or default example */
+(function initTerm(){
+  const m = location.hash.match(/term=([^&]+)/);
+  const start = m ? decodeURIComponent(m[1]) : 'CL:0000080';
+  loadTerm(start);
+})();
+</script>
+</body>
+</html>
