@@ -12,9 +12,14 @@ NONBASE_ONTOLOGIES := $(shell cat "ontologies.txt")
 
 all: ubergraph.jnl.gz ubergraph.nq.gz redundant-graph-table.tgz nonredundant-graph-table.tgz ontologies-merged.ofn.gz #ubergraph-oxigraph.tgz
 
+# CHEBI is the only ontology in ontologies.txt distributed gzipped. `robot merge`
+# reads the .gz (so CHEBI ends up in the merged/reasoned graphs), but the per-graph
+# `blazegraph-runner load --informat=rdfxml` step does not, leaving CHEBI without a
+# source named graph. Decompress it so it loads like every other ontology.
 mirror: ontologies.txt pr-base.owl po-base.owl ppo-base.owl apo-base.owl mmusdv-base.owl hsapdv-base.owl foodon-base.owl to-base.owl peco-base.owl mro-base.owl hao-base.owl clao-base.owl oarcs-base.owl ubergraph-axioms.ofn
 	mkdir -p $@ && cd $@ &&\
 	xargs -n 1 curl --retry 5 -L -O <../ontologies.txt &&\
+	gunzip -f chebi.owl.gz &&\
 	cp ../pr-base.owl pr-base.owl &&\
 	cp ../po-base.owl po-base.owl &&\
 	cp ../ppo-base.owl ppo-base.owl &&\
