@@ -1,6 +1,6 @@
 ROBOT_ENV=ROBOT_JAVA_ARGS="-Xmx180G -XX:+UseParallelGC"
 ROBOT=$(ROBOT_ENV) robot
-RG_ENV=JAVA_OPTS="-Xmx180G -XX:+UseParallelGC"
+RG_ENV=JAVA_OPTS="-Xmx220G -XX:+UseParallelGC"
 RG=$(RG_ENV) relation-graph
 BG_RUNNER=JAVA_OPTS="-Xmx80G -XX:+UseParallelGC" blazegraph-runner
 JVM_ARGS=JVM_ARGS="-Xmx180G -XX:+UseParallelGC"
